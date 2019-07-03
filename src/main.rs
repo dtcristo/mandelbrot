@@ -1,6 +1,5 @@
 use minifb::{Key, Window, WindowOptions};
 use palette::{encoding::pixel::Pixel, Gradient, Hsv, LinSrgb};
-use std::convert::TryFrom;
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
@@ -27,7 +26,7 @@ fn main() {
     ]);
 
     let palette: Vec<u32> = grad
-        .take(usize::try_from(MAX_ITERATIONS).unwrap())
+        .take(MAX_ITERATIONS)
         .map(|color| {
             let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
             (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
