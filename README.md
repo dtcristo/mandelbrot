@@ -2,7 +2,7 @@
 
 [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) in Rust.
 
-![mandelbrot](mandelbrot.png)
+![mandelbrot](images/mandelbrot.png)
 
 ## Installation
 
