@@ -5,7 +5,7 @@ use std::time::SystemTime;
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
-const GRADIENT_SIZE: usize = 50;
+const GRADIENT_SIZE: usize = 100;
 const MAX_ITERATIONS: usize = 1000;
 
 fn main() {
@@ -18,9 +18,9 @@ fn main() {
     let mut window = Window::new("mandelbrot", WIDTH, HEIGHT, WindowOptions::default()).unwrap();
 
     let palette: Vec<u32> = Gradient::new(vec![
-        Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
         Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
         Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
+        Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
     ])
     .take(GRADIENT_SIZE)
     .map(|color| {
@@ -80,7 +80,7 @@ fn render(centre: (f64, f64), zoom: usize, palette: &[u32]) -> Vec<u32> {
                     if iterations == MAX_ITERATIONS {
                         0
                     } else {
-                        palette[MAX_ITERATIONS - iterations]
+                        palette[iterations]
                     }
                 })
                 .collect::<Vec<u32>>()
