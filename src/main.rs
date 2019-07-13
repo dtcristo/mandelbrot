@@ -5,7 +5,7 @@ use std::time::SystemTime;
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
-const PALETE_SIZE: usize = 60;
+const PALETTE_SIZE: usize = 100;
 const MAX_ITERATIONS: usize = 1000;
 
 fn main() {
@@ -24,7 +24,7 @@ fn main() {
     ]);
 
     let palette: Vec<u32> = gradient
-        .take(PALETE_SIZE)
+        .take(PALETTE_SIZE)
         .map(|color| {
             let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
             (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
