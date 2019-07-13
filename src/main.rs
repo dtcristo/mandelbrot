@@ -116,7 +116,7 @@ fn frame_bounds(centre: (f64, f64), zoom: usize) -> (f64, f64, f64, f64) {
 
 fn mouse_coords(centre: (f64, f64), zoom: usize, mouse_pos: (f32, f32)) -> (f64, f64) {
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
-    let x_m = (f64::from(mouse_pos.0) / WIDTH as f64) * (x_max - x_min) + x_min;
-    let y_m = (f64::from(mouse_pos.1) / HEIGHT as f64) * (y_min - y_max) + y_max;
-    (x_m, y_m)
+    let x = (f64::from(mouse_pos.0) / WIDTH as f64) * (x_max - x_min) + x_min;
+    let y = (f64::from(mouse_pos.1) / HEIGHT as f64) * (y_min - y_max) + y_max;
+    (x, y)
 }
