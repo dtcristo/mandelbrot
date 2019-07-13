@@ -3,6 +3,7 @@ use palette::{encoding::pixel::Pixel, Gradient, Hsv, LinSrgb};
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
+const PALETE_SIZE: usize = 160;
 
 fn main() {
     let mut centre: (f64, f64) = (-0.666, 0.0);
@@ -36,17 +37,26 @@ fn main() {
 }
 
 fn render(centre: (f64, f64), zoom: usize, buffer: &mut [u32]) {
-    let max_iterations = 20 + 4 * zoom;
-    println!("{}", max_iterations);
+    let max_iterations = 30 + 6 * zoom;
 
     let grad = Gradient::new(vec![
+        Hsv::from(LinSrgb::new(0.0, 0.0, 0.0)),
+        Hsv::from(LinSrgb::new(1.0, 0.0, 1.0)),
+        Hsv::from(LinSrgb::new(0.0, 0.0, 1.0)),
+        Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
+        Hsv::from(LinSrgb::new(0.0, 1.0, 0.0)),
+        Hsv::from(LinSrgb::new(1.0, 1.0, 0.0)),
+        Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
+        Hsv::from(LinSrgb::new(1.0, 1.0, 0.0)),
+        Hsv::from(LinSrgb::new(0.0, 1.0, 0.0)),
+        Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
         Hsv::from(LinSrgb::new(0.0, 0.0, 1.0)),
         Hsv::from(LinSrgb::new(1.0, 0.0, 1.0)),
-        Hsv::from(LinSrgb::new(0.001, 0.0, 0.0)),
+        Hsv::from(LinSrgb::new(0.0, 0.0, 0.0)),
     ]);
 
     let palette: Vec<u32> = grad
-        .take(20)
+        .take(PALETE_SIZE)
         .map(|color| {
             let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
             (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
@@ -54,16 +64,12 @@ fn render(centre: (f64, f64), zoom: usize, buffer: &mut [u32]) {
         .collect();
 
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
-    println!(
-        "x_min: {}, x_max: {}, y_min: {}, y_max: {}",
-        x_min, x_max, y_min, y_max
-    );
     for p_y in 0..HEIGHT {
         let y_0: f64 = (p_y as f64 / HEIGHT as f64) * (y_min - y_max) + y_max;
         for p_x in 0..WIDTH {
             let x_0: f64 = (p_x as f64 / WIDTH as f64) * (x_max - x_min) + x_min;
             let escape_time = iterate(x_0, y_0, max_iterations);
-            buffer[p_y * WIDTH + p_x] = palette[(escape_time - 1) % 20];
+            buffer[p_y * WIDTH + p_x] = palette[(max_iterations - escape_time) % PALETE_SIZE];
         }
     }
 }
