@@ -10,7 +10,7 @@ const MAX_ITERATIONS: usize = 1000;
 
 fn main() {
     let mut centre = (-0.666_f64, 0.0_f64);
-    let mut zoom = 0_usize;
+    let mut zoom = 0;
     let mut mouse_left_was_down = false;
     let mut mouse_right_was_down = false;
     let mut buffer = vec![0_u32; WIDTH * HEIGHT];
@@ -70,17 +70,17 @@ fn render(centre: (f64, f64), zoom: usize, palette: &[u32]) -> Vec<u32> {
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
     (0..HEIGHT)
         .into_par_iter()
-        .map(|p_y| {
-            let y_0: f64 = (p_y as f64 / HEIGHT as f64) * (y_min - y_max) + y_max;
+        .map(|row| {
+            let y = (row as f64 / HEIGHT as f64) * (y_min - y_max) + y_max;
             (0..WIDTH)
                 .into_par_iter()
-                .map(|p_x| {
-                    let x_0: f64 = (p_x as f64 / WIDTH as f64) * (x_max - x_min) + x_min;
-                    let escape_time = iterate(x_0, y_0);
-                    if escape_time == MAX_ITERATIONS {
+                .map(|column| {
+                    let x = (column as f64 / WIDTH as f64) * (x_max - x_min) + x_min;
+                    let iterations = iterate(x, y);
+                    if iterations == MAX_ITERATIONS {
                         0
                     } else {
-                        palette[MAX_ITERATIONS - escape_time]
+                        palette[MAX_ITERATIONS - iterations]
                     }
                 })
                 .collect::<Vec<u32>>()
@@ -92,15 +92,15 @@ fn render(centre: (f64, f64), zoom: usize, palette: &[u32]) -> Vec<u32> {
 fn iterate(x_0: f64, y_0: f64) -> usize {
     let mut x = 0.0;
     let mut y = 0.0;
-    let mut iteration = 0;
-    while x * x + y * y <= 4.0 && iteration < MAX_ITERATIONS {
+    let mut iterations = 0;
+    while x * x + y * y <= 4.0 && iterations < MAX_ITERATIONS {
         let x_new = x * x - y * y + x_0;
         let y_new = 2.0 * x * y + y_0;
         x = x_new;
         y = y_new;
-        iteration += 1;
+        iterations += 1;
     }
-    iteration
+    iterations
 }
 
 fn frame_bounds(centre: (f64, f64), zoom: usize) -> (f64, f64, f64, f64) {
