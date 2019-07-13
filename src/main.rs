@@ -5,7 +5,7 @@ use std::time::SystemTime;
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
-const PALETTE_SIZE: usize = 100;
+const PALETTE_SIZE: usize = 50;
 const MAX_ITERATIONS: usize = 1000;
 
 fn main() {
@@ -57,7 +57,7 @@ fn main() {
             buffer = render(centre, zoom, &palette);
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
-            println!("Rendered in {:?}", duration);
+            println!("rendered in {:?}", duration);
             stale_buffer = false;
         }
         window.update_with_buffer(&buffer).unwrap();
@@ -65,6 +65,7 @@ fn main() {
 }
 
 fn render(centre: (f64, f64), zoom: usize, palette: &[u32]) -> Vec<u32> {
+    println!("centre {:?} at zoom {}", centre, zoom);
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
     (0..HEIGHT)
         .into_par_iter()
