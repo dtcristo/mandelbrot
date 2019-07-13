@@ -1,84 +1,97 @@
 use minifb::{Key, MouseButton, MouseMode, Window, WindowOptions};
 use palette::{encoding::pixel::Pixel, Gradient, Hsv, LinSrgb};
+use rayon::prelude::*;
+use std::time::SystemTime;
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
-const PALETE_SIZE: usize = 160;
+const PALETE_SIZE: usize = 60;
+const MAX_ITERATIONS: usize = 1000;
 
 fn main() {
-    let mut centre: (f64, f64) = (-0.666, 0.0);
-    let mut zoom: usize = 0;
-    let mut mouse_was_down: bool = false;
-    let mut buffer: Vec<u32> = vec![0; WIDTH * HEIGHT];
-    let mut stale_buffer: bool = true;
+    let mut centre = (-0.666_f64, 0.0_f64);
+    let mut zoom = 0_usize;
+    let mut mouse_left_was_down = false;
+    let mut mouse_right_was_down = false;
+    let mut buffer = vec![0_u32; WIDTH * HEIGHT];
+    let mut stale_buffer = true;
+    let mut window = Window::new("mandelbrot", WIDTH, HEIGHT, WindowOptions::default()).unwrap();
 
-    let mut window = Window::new("mandelbrot", WIDTH, HEIGHT, WindowOptions::default())
-        .unwrap_or_else(|e| {
-            panic!("{}", e);
-        });
+    let gradient = Gradient::new(vec![
+        Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
+        Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
+        Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
+    ]);
+
+    let palette: Vec<u32> = gradient
+        .take(PALETE_SIZE)
+        .map(|color| {
+            let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
+            (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
+        })
+        .cycle()
+        .take(MAX_ITERATIONS)
+        .collect();
 
     while window.is_open() && !window.is_key_down(Key::Escape) {
-        let mouse_down = window.get_mouse_down(MouseButton::Left);
-        if mouse_was_down && !mouse_down {
+        let mouse_left_down = window.get_mouse_down(MouseButton::Left);
+        let mouse_right_down = window.get_mouse_down(MouseButton::Right);
+        if mouse_left_was_down && !mouse_left_down {
             if let Some(mouse_pos) = window.get_unscaled_mouse_pos(MouseMode::Clamp) {
                 centre = mouse_coords(centre, zoom, mouse_pos);
                 zoom += 1;
                 stale_buffer = true;
             }
+        } else if mouse_right_was_down && !mouse_right_down && zoom > 0 {
+            zoom -= 1;
+            if zoom == 0 {
+                centre = (-0.666, 0.0);
+            }
+            stale_buffer = true;
         }
-        mouse_was_down = mouse_down;
+        mouse_left_was_down = mouse_left_down;
+        mouse_right_was_down = mouse_right_down;
 
         if stale_buffer {
-            render(centre, zoom, &mut buffer);
+            let start = SystemTime::now();
+            buffer = render(centre, zoom, &palette);
+            let end = SystemTime::now();
+            let duration = end.duration_since(start).unwrap();
+            println!("Rendered in {:?}", duration);
             stale_buffer = false;
         }
         window.update_with_buffer(&buffer).unwrap();
     }
 }
 
-fn render(centre: (f64, f64), zoom: usize, buffer: &mut [u32]) {
-    let max_iterations = 30 + 6 * zoom;
-
-    let grad = Gradient::new(vec![
-        Hsv::from(LinSrgb::new(0.0, 0.0, 0.0)),
-        Hsv::from(LinSrgb::new(1.0, 0.0, 1.0)),
-        Hsv::from(LinSrgb::new(0.0, 0.0, 1.0)),
-        Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
-        Hsv::from(LinSrgb::new(0.0, 1.0, 0.0)),
-        Hsv::from(LinSrgb::new(1.0, 1.0, 0.0)),
-        Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
-        Hsv::from(LinSrgb::new(1.0, 1.0, 0.0)),
-        Hsv::from(LinSrgb::new(0.0, 1.0, 0.0)),
-        Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
-        Hsv::from(LinSrgb::new(0.0, 0.0, 1.0)),
-        Hsv::from(LinSrgb::new(1.0, 0.0, 1.0)),
-        Hsv::from(LinSrgb::new(0.0, 0.0, 0.0)),
-    ]);
-
-    let palette: Vec<u32> = grad
-        .take(PALETE_SIZE)
-        .map(|color| {
-            let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
-            (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
-        })
-        .collect();
-
+fn render(centre: (f64, f64), zoom: usize, palette: &[u32]) -> Vec<u32> {
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
-    for p_y in 0..HEIGHT {
-        let y_0: f64 = (p_y as f64 / HEIGHT as f64) * (y_min - y_max) + y_max;
-        for p_x in 0..WIDTH {
-            let x_0: f64 = (p_x as f64 / WIDTH as f64) * (x_max - x_min) + x_min;
-            let escape_time = iterate(x_0, y_0, max_iterations);
-            buffer[p_y * WIDTH + p_x] = palette[(max_iterations - escape_time) % PALETE_SIZE];
-        }
-    }
+    (0..HEIGHT)
+        .into_par_iter()
+        .map(|p_y| {
+            let y_0: f64 = (p_y as f64 / HEIGHT as f64) * (y_min - y_max) + y_max;
+            (0..WIDTH)
+                .into_par_iter()
+                .map(|p_x| {
+                    let x_0: f64 = (p_x as f64 / WIDTH as f64) * (x_max - x_min) + x_min;
+                    let escape_time = iterate(x_0, y_0);
+                    if escape_time == MAX_ITERATIONS {
+                        0
+                    } else {
+                        palette[MAX_ITERATIONS - escape_time]
+                    }
+                })
+                .collect::<Vec<u32>>()
+        })
+        .flatten()
+        .collect()
 }
 
-fn iterate(x_0: f64, y_0: f64, max_iterations: usize) -> usize {
-    let mut x: f64 = 0.0;
-    let mut y: f64 = 0.0;
+fn iterate(x_0: f64, y_0: f64) -> usize {
+    let mut x = 0.0;
+    let mut y = 0.0;
     let mut iteration = 0;
-    while x * x + y * y <= 4.0 && iteration < max_iterations {
+    while x * x + y * y <= 4.0 && iteration < MAX_ITERATIONS {
         let x_new = x * x - y * y + x_0;
         let y_new = 2.0 * x * y + y_0;
         x = x_new;
@@ -101,7 +114,7 @@ fn frame_bounds(centre: (f64, f64), zoom: usize) -> (f64, f64, f64, f64) {
 
 fn mouse_coords(centre: (f64, f64), zoom: usize, mouse_pos: (f32, f32)) -> (f64, f64) {
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
-    let x_m: f64 = (f64::from(mouse_pos.0) / WIDTH as f64) * (x_max - x_min) + x_min;
-    let y_m: f64 = (f64::from(mouse_pos.1) / HEIGHT as f64) * (y_min - y_max) + y_max;
+    let x_m = (f64::from(mouse_pos.0) / WIDTH as f64) * (x_max - x_min) + x_min;
+    let y_m = (f64::from(mouse_pos.1) / HEIGHT as f64) * (y_min - y_max) + y_max;
     (x_m, y_m)
 }
