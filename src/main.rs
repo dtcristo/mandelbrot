@@ -5,7 +5,7 @@ use std::time::SystemTime;
 
 const WIDTH: usize = 1024;
 const HEIGHT: usize = 768;
-const PALETTE_SIZE: usize = 50;
+const GRADIENT_SIZE: usize = 50;
 const MAX_ITERATIONS: usize = 1000;
 
 fn main() {
@@ -17,21 +17,19 @@ fn main() {
     let mut stale_buffer = true;
     let mut window = Window::new("mandelbrot", WIDTH, HEIGHT, WindowOptions::default()).unwrap();
 
-    let gradient = Gradient::new(vec![
+    let palette: Vec<u32> = Gradient::new(vec![
         Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
         Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
         Hsv::from(LinSrgb::new(1.0, 0.0, 0.0)),
-    ]);
-
-    let palette: Vec<u32> = gradient
-        .take(PALETTE_SIZE)
-        .map(|color| {
-            let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
-            (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
-        })
-        .cycle()
-        .take(MAX_ITERATIONS)
-        .collect();
+    ])
+    .take(GRADIENT_SIZE)
+    .map(|color| {
+        let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
+        (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
+    })
+    .cycle()
+    .take(MAX_ITERATIONS)
+    .collect();
 
     while window.is_open() && !window.is_key_down(Key::Escape) {
         let mouse_left_down = window.get_mouse_down(MouseButton::Left);
@@ -57,7 +55,7 @@ fn main() {
             buffer = render(centre, zoom, &palette);
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
-            println!("rendered in {:?}", duration);
+            println!("done in {:?}", duration);
             stale_buffer = false;
         }
         window.update_with_buffer(&buffer).unwrap();
@@ -65,7 +63,10 @@ fn main() {
 }
 
 fn render(centre: (f64, f64), zoom: usize, palette: &[u32]) -> Vec<u32> {
-    println!("centre {:?} at zoom {}", centre, zoom);
+    println!(
+        "centre {:?}, zoom {}, {} iterations... ",
+        centre, zoom, MAX_ITERATIONS
+    );
     let (x_min, x_max, y_min, y_max) = frame_bounds(centre, zoom);
     (0..HEIGHT)
         .into_par_iter()
