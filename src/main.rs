@@ -1,4 +1,4 @@
-use minifb::{Key, MouseButton, MouseMode, Scale, Window, WindowOptions};
+use minifb::{Key, MouseButton, MouseMode, Window, WindowOptions};
 use palette::{encoding::pixel::Pixel, Gradient, Hsv, LinSrgb};
 use rayon::prelude::*;
 use std::time::SystemTime;
@@ -96,11 +96,11 @@ fn render(
                 .into_par_iter()
                 .map(|column| {
                     let x = (column as f64 / window_size.0 as f64) * (x_max - x_min) + x_min;
-                    let iterations = iterate(x, y);
-                    if iterations == MAX_ITERATIONS {
+                    let i = iterate(x, y);
+                    if i == MAX_ITERATIONS {
                         0
                     } else {
-                        palette[iterations]
+                        palette[i]
                     }
                 })
                 .collect::<Vec<u32>>()
@@ -112,15 +112,15 @@ fn render(
 fn iterate(x_0: f64, y_0: f64) -> usize {
     let mut x = 0.0;
     let mut y = 0.0;
-    let mut iterations = 0;
-    while x * x + y * y <= 4.0 && iterations < MAX_ITERATIONS {
+    let mut i = 0;
+    while i < MAX_ITERATIONS && x * x + y * y <= 4.0 {
         let x_new = x * x - y * y + x_0;
         let y_new = 2.0 * x * y + y_0;
         x = x_new;
         y = y_new;
-        iterations += 1;
+        i += 1;
     }
-    iterations
+    i
 }
 
 fn frame_bounds(centre: (f64, f64), zoom: usize) -> (f64, f64, f64, f64) {
