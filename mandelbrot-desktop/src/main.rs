@@ -31,7 +31,8 @@ fn main() {
         // if window_size != old_window_size {
         //     println!("window resized {:?}", window_size);
         //     do_render = true;
-        /*} else */ if mouse_left_was_down && !mouse_left_down {
+        /*} else */
+        if mouse_left_was_down && !mouse_left_down {
             if let Some(mouse_pos) = window.get_unscaled_mouse_pos(MouseMode::Clamp) {
                 centre = mouse_coords(window_size, centre, zoom, mouse_pos);
                 zoom += 1;
@@ -49,7 +50,14 @@ fn main() {
 
         if do_render {
             let start = SystemTime::now();
-            let buffer = render(window_size.0, window_size.1, centre.0, centre.1, zoom, MAX_ITERATIONS);
+            let buffer = render(
+                window_size.0,
+                window_size.1,
+                centre.0,
+                centre.1,
+                zoom,
+                MAX_ITERATIONS,
+            );
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("done in {:?}", duration);

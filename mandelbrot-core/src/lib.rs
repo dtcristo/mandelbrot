@@ -1,4 +1,5 @@
 use palette::{encoding::pixel::Pixel, Gradient, Hsv, LinSrgb};
+use safe_transmute::to_bytes::transmute_to_bytes;
 use wasm_bindgen::prelude::*;
 
 const GRADIENT_SIZE: usize = 100;
@@ -11,7 +12,7 @@ pub fn render(
     centre_y: f64,
     zoom: usize,
     max_iterations: usize,
-) -> Vec<u32> {
+) -> Vec<u8> {
     let centre = (centre_x, centre_y);
     println!(
         "centre {:?}, zoom {}, {} iterations... ",
@@ -27,14 +28,16 @@ pub fn render(
     .take(GRADIENT_SIZE)
     .map(|color| {
         let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
-        (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
+        // 255 << 24 | (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
+        255 << 24 | (u32::from(pixel[2]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[0]))
     })
     .cycle()
     .take(max_iterations)
     .collect();
 
-    let (x_min, x_max, y_min, y_max) = frame_bounds(centre_x, centre_y, zoom);
-    (0..frame_height)
+    let (x_min, x_max, y_min, y_max) =
+        frame_bounds(frame_width, frame_height, centre_x, centre_y, zoom);
+    let data = (0..frame_height)
         .map(|row| {
             let y = (row as f64 / frame_height as f64) * (y_min - y_max) + y_max;
             (0..frame_width)
@@ -42,7 +45,8 @@ pub fn render(
                     let x = (column as f64 / frame_width as f64) * (x_max - x_min) + x_min;
                     let i = iterate(x, y, max_iterations);
                     if i == max_iterations {
-                        0
+                        // 255 << 24 | 0
+                        0xFF000000
                     } else {
                         palette[i]
                     }
@@ -50,7 +54,8 @@ pub fn render(
                 .collect::<Vec<u32>>()
         })
         .flatten()
-        .collect()
+        .collect::<Vec<u32>>();
+    transmute_to_bytes(&data).to_vec()
 }
 
 fn iterate(c_x: f64, c_y: f64, max_iterations: usize) -> usize {
@@ -67,10 +72,17 @@ fn iterate(c_x: f64, c_y: f64, max_iterations: usize) -> usize {
     i
 }
 
-pub fn frame_bounds(centre_x: f64, centre_y: f64, zoom: usize) -> (f64, f64, f64, f64) {
+pub fn frame_bounds(
+    frame_width: usize,
+    frame_height: usize,
+    centre_x: f64,
+    centre_y: f64,
+    zoom: usize,
+) -> (f64, f64, f64, f64) {
     let zoom_scale = 2.0_f64.powf(zoom as f64);
-    let delta_x = 1.666 * (1.0 / zoom_scale);
-    let delta_y = 1.25 * (1.0 / zoom_scale);
+    let aspect_ratio = frame_width as f64 / frame_height as f64;
+    let delta_x = aspect_ratio * (1.0 / zoom_scale);
+    let delta_y = 1.0 / zoom_scale;
     let x_min = centre_x - delta_x;
     let x_max = centre_x + delta_x;
     let y_min = centre_y - delta_y;

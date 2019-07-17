@@ -1,0 +1,24 @@
+{
+  "name": "mandelbrot-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "watch": "rm -rf dist/ && npm run copy && tsc --noEmit --watch & rollup --config --watch",
+    "build": "rm -rf dist/ && npm run copy && tsc --noEmit && rollup --config",
+    "copy": "mkdir dist/ && cp src/index.html ../mandelbrot-core/pkg/mandelbrot_core_bg.wasm dist/"
+  },
+  "dependencies": {
+    "haunted": "^4.4.0",
+    "lit-html": "^1.1.0",
+    "lodash-es": "^4.17.14",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.3",
+    "rollup": "^1.15.5",
+    "rollup-plugin-node-resolve": "^5.0.2",
+    "rollup-plugin-terser": "^5.0.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "typescript": "^3.5.2"
+  }
+}

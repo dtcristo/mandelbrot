@@ -9,4 +9,5 @@ crate-type = ["lib", "cdylib"]
 
 [dependencies]
 palette = "0.4"
+safe-transmute = "0.11.0-rc.2"
 wasm-bindgen = "0.2.44"
