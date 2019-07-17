@@ -81,8 +81,8 @@ pub fn frame_bounds(
 ) -> (f64, f64, f64, f64) {
     let zoom_scale = 2.0_f64.powf(zoom as f64);
     let aspect_ratio = frame_width as f64 / frame_height as f64;
-    let delta_x = aspect_ratio * (1.0 / zoom_scale);
-    let delta_y = 1.0 / zoom_scale;
+    let delta_x = 1.25 * aspect_ratio * (1.0 / zoom_scale);
+    let delta_y = 1.25 * (1.0 / zoom_scale);
     let x_min = centre_x - delta_x;
     let x_max = centre_x + delta_x;
     let y_min = centre_y - delta_y;
