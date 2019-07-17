@@ -1,3 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 set -e
-firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+if [ "$CIRCLECI" == "true" ]; then
+  firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+else
+  firebase deploy
+fi
