@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# Deploy to Firebase Hosting at https://mandelbrot-595fd.web.app/
+# Deploy to Firebase Hosting at https://mandelbrot-rust.web.app/
 if [ "$CIRCLECI" = "true" ]; then
   firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
 else
