@@ -8,8 +8,6 @@
     "copy": "mkdir dist/ && cp src/index.html ../mandelbrot-core/pkg/mandelbrot_core_bg.wasm dist/"
   },
   "dependencies": {
-    "haunted": "^4.4.0",
-    "lit-html": "^1.1.0",
     "lodash-es": "^4.17.14",
     "tslib": "^1.9.3"
   },

@@ -72,7 +72,7 @@ fn iterate(c_x: f64, c_y: f64, max_iterations: usize) -> usize {
     i
 }
 
-pub fn frame_bounds(
+fn frame_bounds(
     frame_width: usize,
     frame_height: usize,
     centre_x: f64,
@@ -88,4 +88,27 @@ pub fn frame_bounds(
     let y_min = centre_y - delta_y;
     let y_max = centre_y + delta_y;
     (x_min, x_max, y_min, y_max)
+}
+
+#[wasm_bindgen]
+pub struct Point {
+    pub x: f64,
+    pub y: f64,
+}
+
+#[wasm_bindgen]
+pub fn mouse_coords(
+    frame_width: usize,
+    frame_height: usize,
+    centre_x: f64,
+    centre_y: f64,
+    zoom: usize,
+    mouse_x: f32,
+    mouse_y: f32,
+) -> Point {
+    let (x_min, x_max, y_min, y_max) =
+        frame_bounds(frame_width, frame_height, centre_x, centre_y, zoom);
+    let x = (f64::from(mouse_x) / frame_width as f64) * (x_max - x_min) + x_min;
+    let y = (f64::from(mouse_y) / frame_height as f64) * (y_min - y_max) + y_max;
+    Point { x, y }
 }

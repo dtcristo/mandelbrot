@@ -1,7 +1,7 @@
 use minifb::{Key, MouseButton, MouseMode, Window, WindowOptions};
 use std::time::SystemTime;
 
-use mandelbrot_core::{frame_bounds, render};
+use mandelbrot_core::{mouse_coords, render};
 
 const MAX_ITERATIONS: usize = 1000;
 
@@ -67,16 +67,4 @@ fn main() {
             window.update();
         }
     }
-}
-
-fn mouse_coords(
-    window_size: (usize, usize),
-    centre: (f64, f64),
-    zoom: usize,
-    mouse_pos: (f32, f32),
-) -> (f64, f64) {
-    let (x_min, x_max, y_min, y_max) = frame_bounds(centre.0, centre.1, zoom);
-    let x = (f64::from(mouse_pos.0) / window_size.0 as f64) * (x_max - x_min) + x_min;
-    let y = (f64::from(mouse_pos.1) / window_size.1 as f64) * (y_min - y_max) + y_max;
-    (x, y)
 }

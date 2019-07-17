@@ -1,34 +1,62 @@
 import throttle from "lodash-es/throttle";
 
-import init, { render } from "../../mandelbrot-core/pkg";
+import init, {
+  render as renderWasm,
+  mouse_coords as mouseCoords
+} from "../../mandelbrot-core/pkg";
 
-let initDone = false;
-let centre_x = -0.666;
-let centre_y = 0;
+const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+
+let centreX = -0.666;
+let centreY = 0;
 let zoom = 0;
-let max_iterations = 100;
+let maxIterations = 100;
 
 async function main() {
-  await untilInit();
+  await init("mandelbrot_core_bg.wasm");
+  resizeCanvas();
+  render();
   window.onresize = throttle(handleResize, 1000, { leading: false });
-  handleResize();
+  canvas.onclick = handleLeftClick;
+  canvas.oncontextmenu = handleRightClick;
 }
 
-async function untilInit() {
-  if (!initDone) {
-    await init("mandelbrot_core_bg.wasm");
-    initDone = true;
+function handleLeftClick(event: MouseEvent) {
+  let point = mouseCoords(
+    canvas.width,
+    canvas.height,
+    centreX,
+    centreY,
+    zoom,
+    event.clientX,
+    event.clientY
+  );
+  centreX = point.x;
+  centreY = point.y;
+  point.free();
+  zoom += 1;
+  render();
+}
+
+function handleRightClick(event: MouseEvent) {
+  event.preventDefault();
+  if (zoom > 0) {
+    zoom -= 1;
+    if (zoom === 0) {
+      centreX = -0.666;
+      centreY = 0.0;
+    }
+    render();
   }
 }
 
 function handleResize() {
-  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-  if (resizeCanvas(canvas)) {
-    renderToCanvas(canvas);
+  if (resizeCanvas()) {
+    render();
   }
 }
 
-function resizeCanvas(canvas: HTMLCanvasElement): boolean {
+function resizeCanvas(): boolean {
   const multiplier = window.devicePixelRatio || 1;
   const width = (canvas.clientWidth * multiplier) | 0;
   const height = (canvas.clientHeight * multiplier) | 0;
@@ -40,14 +68,14 @@ function resizeCanvas(canvas: HTMLCanvasElement): boolean {
   return false;
 }
 
-function renderToCanvas(canvas: HTMLCanvasElement) {
-  const data = render(
+function render() {
+  const data = renderWasm(
     canvas.width,
     canvas.height,
-    centre_x,
-    centre_y,
+    centreX,
+    centreY,
     zoom,
-    max_iterations
+    maxIterations
   );
   const imageData = new ImageData(
     new Uint8ClampedArray(data),
