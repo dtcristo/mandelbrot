@@ -16,10 +16,8 @@ async function main() {
 
 async function untilInit() {
   if (!initDone) {
-    console.log("about to init");
     await init("mandelbrot_core_bg.wasm");
     initDone = true;
-    console.log("init complete");
   }
 }
 
