@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -e
 
 # Start development server at http://localhost:5000/
 firebase serve

@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -e
 
 # Install Rust dependencies
 rustup target add wasm32-unknown-unknown
@@ -14,7 +14,6 @@ cd ../
 if [ "$CIRCLECI" = "true" ]; then
   npm set prefix=/home/circleci/npm
   echo 'export PATH="/home/circleci/npm/bin:$PATH"' >>$BASH_ENV
-  . $BASH_ENV
 fi
 
 # Install development and deployment tools

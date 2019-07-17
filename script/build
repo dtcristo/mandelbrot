@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -e
 
 # Build Rust shared WASM library
 wasm-pack build mandelbrot-core --target web
