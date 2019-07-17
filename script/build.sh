@@ -1,4 +1,10 @@
-#!/bin/bash
-set -e
+#!/bin/sh
+set -ex
+
+# Build Rust shared WASM library
 wasm-pack build mandelbrot-core --target web
-cd mandelbrot-web/ && npm run build && cd ../
+
+# Build web frontend
+cd mandelbrot-web/
+npm run build
+cd ../
