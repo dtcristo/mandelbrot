@@ -1,2 +1,6 @@
-/target
+.firebase/
+dist/
+node_modules/
+target/
+*.log
 **/*.rs.bk

@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/rust:latest-node
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run: script/setup.sh
+      - run: script/build.sh
+      - run: script/deploy.sh

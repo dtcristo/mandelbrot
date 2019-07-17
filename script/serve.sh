@@ -1,2 +1,3 @@
 #!/bin/sh
-sirv mandelbrot-web/dist/ --dev
+set -e
+firebase serve
