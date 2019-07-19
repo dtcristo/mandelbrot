@@ -1,13 +1,33 @@
 # mandelbrot
 
-[Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) in Rust.
+[Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) in Rust targeting
+WebAssembly, online at [mandelbrot-rust.web.app](https://mandelbrot-rust.web.app/).
 
 ![mandelbrot](images/mandelbrot.png)
 
-## Installation
+## Controls
+
+- Left click to zoom in.
+- Right click to zoom out.
+
+## Development
+
+Install dependencies.
 
 ```sh
-cargo run
+script/setup
+```
+
+Build Rust and web frontend.
+
+```sh
+script/build
+```
+
+Serve frontend at [localhost:5000](http://localhost:5000/).
+
+```sh
+script/serve
 ```
 
 ## License
