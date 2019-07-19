@@ -96,7 +96,7 @@ pub struct Point {
     pub y: f64,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(js_name = mouseCoords)]
 pub fn mouse_coords(
     frame_width: usize,
     frame_height: usize,

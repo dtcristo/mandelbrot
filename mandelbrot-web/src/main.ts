@@ -2,7 +2,7 @@ import throttle from "lodash-es/throttle";
 
 import init, {
   render as renderWasm,
-  mouse_coords as mouseCoords
+  mouseCoords
 } from "../../mandelbrot-core/pkg";
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
