@@ -23,7 +23,7 @@ async function main() {
 
 function handleLeftClick(event: MouseEvent) {
   const multiplier = window.devicePixelRatio || 1;
-  let point = mouseCoords(
+  const point = mouseCoords(
     canvas.width,
     canvas.height,
     centreX,

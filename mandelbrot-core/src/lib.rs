@@ -13,12 +13,6 @@ pub fn render(
     zoom: usize,
     max_iterations: usize,
 ) -> Vec<u8> {
-    let centre = (centre_x, centre_y);
-    println!(
-        "centre {:?}, zoom {}, {} iterations... ",
-        centre, zoom, max_iterations
-    );
-
     // TODO: Pre-generate palette
     let palette: Vec<u32> = Gradient::new(vec![
         Hsv::from(LinSrgb::new(0.0, 1.0, 1.0)),
@@ -28,7 +22,6 @@ pub fn render(
     .take(GRADIENT_SIZE)
     .map(|color| {
         let pixel: [u8; 3] = LinSrgb::from(color).into_format().into_raw();
-        // 255 << 24 | (u32::from(pixel[0]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[2]))
         255 << 24 | (u32::from(pixel[2]) << 16) | (u32::from(pixel[1]) << 8) | (u32::from(pixel[0]))
     })
     .cycle()
@@ -45,8 +38,7 @@ pub fn render(
                     let x = (column as f64 / frame_width as f64) * (x_max - x_min) + x_min;
                     let i = iterate(x, y, max_iterations);
                     if i == max_iterations {
-                        // 255 << 24 | 0
-                        0xFF000000
+                        0xFF00_0000
                     } else {
                         palette[i]
                     }
