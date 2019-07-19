@@ -22,14 +22,15 @@ async function main() {
 }
 
 function handleLeftClick(event: MouseEvent) {
+  const multiplier = window.devicePixelRatio || 1;
   let point = mouseCoords(
     canvas.width,
     canvas.height,
     centreX,
     centreY,
     zoom,
-    event.clientX,
-    event.clientY
+    event.clientX * multiplier,
+    event.clientY * multiplier
   );
   centreX = point.x;
   centreY = point.y;
