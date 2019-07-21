@@ -3,7 +3,7 @@ set -e
 
 # Install Rust dependencies
 rustup target add wasm32-unknown-unknown
-cargo install wasm-pack --force
+cargo install --force wasm-pack
 
 # Install web frontend dependencies
 cd mandelbrot-web/
@@ -12,7 +12,7 @@ cd ../
 
 # Setup location for installing global npm packages
 if [ "$CIRCLECI" = "true" ]; then
-  npm set prefix=/home/circleci/npm
+  npm config set prefix=/home/circleci/npm
   echo 'export PATH="/home/circleci/npm/bin:$PATH"' >>$BASH_ENV
 fi
 
