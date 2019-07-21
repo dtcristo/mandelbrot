@@ -2,8 +2,6 @@
 set -e
 
 # Deploy to Firebase Hosting at https://mandelbrot-rust.web.app/
-if [ "$CIRCLECI" = "true" ]; then
+if [ "$CIRCLE_BRANCH" = "master" ]; then
   firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
-else
-  firebase deploy
 fi
