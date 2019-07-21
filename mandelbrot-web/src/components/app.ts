@@ -1,25 +1,12 @@
-import { LitElement, html, css, customElement } from "lit-element";
+import { html, customElement } from "lit-element";
 
+import { BaseElement } from "./base_element";
 import "./mandelbrot";
 
 @customElement("x-app")
-export class App extends LitElement {
-  static get styles() {
-    return css`
-      :host {
-        display: flex;
-        height: 100vh;
-      }
-
-      :host > * {
-        flex: 1;
-      }
-    `;
-  }
-
+export class App extends BaseElement {
   render() {
     return html`
-      <x-mandelbrot></x-mandelbrot>
       <x-mandelbrot></x-mandelbrot>
     `;
   }

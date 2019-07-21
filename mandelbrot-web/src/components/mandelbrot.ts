@@ -1,6 +1,7 @@
-import { LitElement, html, css, customElement } from "lit-element";
+import { html, customElement } from "lit-element";
 import throttle from "lodash-es/throttle";
 
+import { BaseElement } from "./base_element";
 import init, {
   render as renderWasm,
   mouseCoords
@@ -21,7 +22,7 @@ async function untilInit() {
 }
 
 @customElement("x-mandelbrot")
-export class Mandelbrot extends LitElement {
+export class Mandelbrot extends BaseElement {
   canvas: HTMLCanvasElement | null = null;
   centreX = -0.666;
   centreY = 0;
@@ -30,16 +31,6 @@ export class Mandelbrot extends LitElement {
   throttledHandleResize = throttle(this.handleResize.bind(this), 1000, {
     leading: false
   });
-
-  static get styles() {
-    return css`
-      canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-    `;
-  }
 
   constructor() {
     super();
@@ -57,14 +48,10 @@ export class Mandelbrot extends LitElement {
     window.removeEventListener("resize", this.throttledHandleResize);
   }
 
-  async firstUpdated() {
+  firstUpdated() {
     console.log("firstUpdated");
-    this.canvas =
-      this.shadowRoot &&
-      (this.shadowRoot.getElementById("canvas") as HTMLCanvasElement);
-    console.log("canvas", this.canvas);
+    this.canvas = this.querySelector("canvas");
     this.resizeCanvas();
-    await untilInit();
     this.updateCanvas();
   }
 
@@ -72,7 +59,6 @@ export class Mandelbrot extends LitElement {
     console.log("render");
     return html`
       <canvas
-        id="canvas"
         @click=${this.handleLeftClick}
         @contextmenu=${this.handleRightClick}
       ></canvas>
@@ -137,9 +123,10 @@ export class Mandelbrot extends LitElement {
     return false;
   }
 
-  updateCanvas() {
+  async updateCanvas() {
     console.log("updateCanvas");
     if (this.canvas) {
+      await untilInit();
       const data = renderWasm(
         this.canvas.width,
         this.canvas.height,
