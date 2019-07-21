@@ -8,4 +8,4 @@ jobs:
       - checkout
       - run: script/setup
       - run: script/build
-      - run: script/deploy
+      - deploy: script/deploy
