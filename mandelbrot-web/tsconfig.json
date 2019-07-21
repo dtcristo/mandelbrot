@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "lib": ["dom", "es2018"],
     "module": "esnext",
     "moduleResolution": "node",
-    "noImplicitAny": false,
     "noImplicitReturns": true,
     "preserveWatchOutput": true,
     "sourceMap": true,
