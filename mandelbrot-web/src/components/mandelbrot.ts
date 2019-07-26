@@ -1,7 +1,7 @@
 import { html, customElement } from "lit-element";
 import throttle from "lodash-es/throttle";
 
-import { BaseElement } from "./base_element";
+import BaseElement from "./base_element";
 import init, {
   render as renderWasm,
   mouseCoords
@@ -22,7 +22,7 @@ async function untilInit() {
 }
 
 @customElement("x-mandelbrot")
-export class Mandelbrot extends BaseElement {
+export default class Mandelbrot extends BaseElement {
   canvas: HTMLCanvasElement | null = null;
   centreX = -0.666;
   centreY = 0;
