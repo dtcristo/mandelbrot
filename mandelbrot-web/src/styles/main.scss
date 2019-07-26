@@ -6,11 +6,11 @@ x-app {
   height: 100vh;
 }
 
-x-app > * {
+x-mandelbrot {
   flex: 1;
 }
 
-x-mandelbrot > canvas {
+x-mandelbrot canvas {
   display: block;
   width: 100%;
   height: 100%;
