@@ -1,9 +1,0 @@
-#!/bin/sh
-set -e
-
-# TODO: Watch Rust files
-
-# Watch web frontend
-cd mandelbrot-web/
-npm run watch
-cd ../

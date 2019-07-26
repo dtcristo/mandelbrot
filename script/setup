@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+# Install development dependencies
+if [ "$CIRCLECI" != "true" ]; then
+  cargo install --force watchexec
+fi
+
 # Install Rust dependencies
 rustup target add wasm32-unknown-unknown
 cargo install --force wasm-pack

@@ -1,0 +1,6 @@
+#!/bin/sh
+set -e
+
+# Watch and type-check frontend
+cd mandelbrot-web/
+node_modules/.bin/tsc --noEmit --watch

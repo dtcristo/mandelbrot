@@ -2,10 +2,6 @@
   "name": "mandelbrot-web",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "build": "rm -rf dist/ && tsc --noEmit && rollup --config",
-    "watch": "rm -rf dist/ && tsc --noEmit --watch & rollup --config --watch"
-  },
   "dependencies": {
     "bulma": "^0.7.5",
     "lit-element": "^2.2.0",

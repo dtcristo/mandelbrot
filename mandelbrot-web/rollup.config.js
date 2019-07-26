@@ -26,7 +26,6 @@ export default {
           dest: "dist"
         }
       ],
-      copyOnce: true,
       verbose: true
     }),
     nodeResolve({

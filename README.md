@@ -30,6 +30,14 @@ Serve frontend at [localhost:5000](http://localhost:5000/).
 script/serve
 ```
 
+Alternatively, start development server with live-reload (requires
+[Hivemind](https://github.com/DarthSim/hivemind) or another `Procfile` process
+manager).
+
+```sh
+script/start
+```
+
 ## License
 
 Licensed under either of
