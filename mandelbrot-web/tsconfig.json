@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "lib": ["dom", "es2018"],
-    "module": "esnext",
+    "module": "es2015",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "preserveWatchOutput": true,
