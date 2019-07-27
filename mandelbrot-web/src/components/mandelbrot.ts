@@ -44,6 +44,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   disconnectedCallback() {
+    console.log("disconnected");
     super.disconnectedCallback();
     window.removeEventListener("resize", this.throttledHandleResize);
   }
@@ -53,6 +54,10 @@ export default class Mandelbrot extends BaseElement {
     this.canvas = this.querySelector("canvas");
     this.resizeCanvas();
     this.updateCanvas();
+  }
+
+  updated() {
+    console.log("updpated");
   }
 
   render() {
