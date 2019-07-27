@@ -1,4 +1,5 @@
 import { html, customElement, property } from "lit-element";
+import { classMap } from "lit-html/directives/class-map";
 
 import BaseElement from "./base_element";
 import "./mandelbrot";
@@ -13,6 +14,18 @@ export default class Navbar extends BaseElement {
   }
 
   render() {
+    const burgerClass = {
+      "navbar-burger": true,
+      "is-active": this.burgerActive
+    };
+    const menuClass = {
+      "navbar-menu": true,
+      "is-active": this.burgerActive
+    };
+    const itemClass = {
+      "navbar-item": true,
+      "is-tab": !this.burgerActive
+    };
     return html`
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
@@ -21,7 +34,7 @@ export default class Navbar extends BaseElement {
           </a>
           <a
             role="button"
-            class="navbar-burger${this.burgerActive ? " is-active" : ""}"
+            class=${classMap(burgerClass)}
             aria-label="menu"
             aria-expanded="${this.burgerActive ? "true" : "false"}"
             @click=${this.onBurgerClick}
@@ -32,11 +45,9 @@ export default class Navbar extends BaseElement {
           </a>
         </div>
 
-        <div class="navbar-menu${this.burgerActive ? " is-active" : ""}">
+        <div class=${classMap(menuClass)}>
           <div class="navbar-start">
-            <a
-              class="navbar-item${this.burgerActive ? "" : " is-tab"} is-active"
-            >
+            <a class=${classMap({ ...itemClass, "is-active": true })}>
               <span class="icon has-text-primary">
                 <i class="fas fa-compass"></i>
               </span>
@@ -45,7 +56,7 @@ export default class Navbar extends BaseElement {
               </span>
             </a>
 
-            <a class="navbar-item${this.burgerActive ? "" : " is-tab"}">
+            <a class=${classMap({ ...itemClass, "is-active": false })}>
               <span class="icon has-text-warning">
                 <i class="fas fa-star"></i>
               </span>
@@ -54,7 +65,7 @@ export default class Navbar extends BaseElement {
               </span>
             </a>
 
-            <a class="navbar-item${this.burgerActive ? "" : " is-tab"}">
+            <a class=${classMap({ ...itemClass, "is-active": false })}>
               <span class="icon has-text-info">
                 <i class="fas fa-info"></i>
               </span>
