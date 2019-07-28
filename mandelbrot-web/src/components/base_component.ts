@@ -1,6 +1,6 @@
 import { LitElement } from "lit-element";
 
-export default class BaseElement extends LitElement {
+export default class BaseComponent extends LitElement {
   createRenderRoot() {
     return this;
   }

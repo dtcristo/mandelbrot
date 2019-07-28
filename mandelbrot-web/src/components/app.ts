@@ -1,18 +1,37 @@
-import { html, customElement } from "lit-element";
+import { customElement, html, query, PropertyValues } from "lit-element";
+import "@appnest/web-router";
+import { IRoute } from "@appnest/web-router";
+import { RouterSlot } from "@appnest/web-router/router-slot";
 
-import BaseElement from "./base_element";
+import BaseComponent from "./base_component";
 import "./navbar";
-import "./mandelbrot";
+import Explore from "./pages/explore";
+import Gallery from "./pages/gallery";
+import About from "./pages/about";
+
+const ROUTES: IRoute[] = [
+  { path: "explore", component: Explore },
+  { path: "gallery", component: Gallery },
+  { path: "about", component: About },
+  { path: "**", redirectTo: "explore" }
+];
 
 @customElement("x-app")
-export default class App extends BaseElement {
+export default class App extends BaseComponent {
+  @query("router-slot") $routerSlot!: RouterSlot;
+
+  firstUpdated(props: PropertyValues) {
+    super.firstUpdated(props);
+    this.$routerSlot.routes = ROUTES;
+  }
+
   render() {
     return html`
       <header>
         <x-navbar></x-navbar>
       </header>
-      <main>
-        <x-mandelbrot></x-mandelbrot>
+      <main role="main">
+        <router-slot></router-slot>
       </main>
     `;
   }

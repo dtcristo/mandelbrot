@@ -1,7 +1,7 @@
 import { html, customElement } from "lit-element";
 import throttle from "lodash-es/throttle";
 
-import BaseElement from "./base_element";
+import BaseElement from "./base_component";
 import init, {
   render as renderWasm,
   mouseCoords

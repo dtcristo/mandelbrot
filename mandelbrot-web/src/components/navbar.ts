@@ -1,8 +1,8 @@
 import { html, customElement, property } from "lit-element";
 import { classMap } from "lit-html/directives/class-map";
+import "@appnest/web-router/router-link";
 
-import BaseElement from "./base_element";
-import "./mandelbrot";
+import BaseElement from "./base_component";
 
 @customElement("x-navbar")
 export default class Navbar extends BaseElement {
@@ -26,12 +26,13 @@ export default class Navbar extends BaseElement {
       "navbar-item": true,
       "is-tab": !this.burgerActive
     };
+
     return html`
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a class="navbar-item" href="/">
+          <router-link class="navbar-item" path="explore">
             <h1 class="title is-4">mandelbrot</h1>
-          </a>
+          </router-link>
           <a
             role="button"
             class=${classMap(burgerClass)}
@@ -47,68 +48,40 @@ export default class Navbar extends BaseElement {
 
         <div class=${classMap(menuClass)}>
           <div class="navbar-start">
-            <a class=${classMap({ ...itemClass, "is-active": true })}>
+            <router-link
+              class=${classMap({ ...itemClass, "is-active": false })}
+              path="explore"
+            >
               <span class="icon has-text-primary">
                 <i class="fas fa-compass"></i>
               </span>
-              <span>
-                Explore
-              </span>
-            </a>
+              <span>Explore</span>
+            </router-link>
 
-            <a class=${classMap({ ...itemClass, "is-active": false })}>
+            <router-link
+              class=${classMap({ ...itemClass, "is-active": false })}
+              path="gallery"
+            >
               <span class="icon has-text-warning">
                 <i class="fas fa-star"></i>
               </span>
-              <span>
-                Gallery
-              </span>
-            </a>
+              <span>Gallery</span>
+            </router-link>
 
-            <a class=${classMap({ ...itemClass, "is-active": false })}>
+            <router-link
+              class=${classMap({ ...itemClass, "is-active": false })}
+              path="about"
+            >
               <span class="icon has-text-info">
                 <i class="fas fa-info"></i>
               </span>
-              <span>
-                About
-              </span>
-            </a>
+              <span>About</span>
+            </router-link>
           </div>
 
           <div class="navbar-end">
-            <!-- <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">
-                <span class="icon">
-                  <i class="fas fa-cog"></i>
-                </span>
-                <span>
-                  Configure
-                </span>
-              </a>
-              <div class="navbar-dropdown">
-                <a class="navbar-item">
-                  About
-                </a>
-                <a class="navbar-item">
-                  Jobs
-                </a>
-                <a class="navbar-item">
-                  Contact
-                </a>
-                <hr class="navbar-divider" />
-                <a class="navbar-item">
-                  Report an issue
-                </a>
-              </div>
-            </div> -->
             <div class="navbar-item">
               <div class="buttons">
-                <!-- <a class="button is-info">
-                  <strong>Sign up</strong>
-                </a>
-                <a class="button is-dark">
-                  Log in
-                </a> -->
                 <a
                   class="button is-light"
                   href="https://github.com/dtcristo/mandelbrot"
