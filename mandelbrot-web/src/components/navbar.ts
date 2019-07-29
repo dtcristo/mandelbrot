@@ -48,34 +48,31 @@ export default class Navbar extends BaseElement {
 
         <div class=${classMap(menuClass)}>
           <div class="navbar-start">
-            <router-link
-              class=${classMap({ ...itemClass, "is-active": false })}
-              path="explore"
+            <router-link path="explore">
+              <a class=${classMap({ ...itemClass, "is-active": false })}>
+                <span class="icon has-text-primary">
+                  <i class="fas fa-compass"></i>
+                </span>
+                <span>Explore</span>
+              </a></router-link
             >
-              <span class="icon has-text-primary">
-                <i class="fas fa-compass"></i>
-              </span>
-              <span>Explore</span>
-            </router-link>
 
-            <router-link
-              class=${classMap({ ...itemClass, "is-active": false })}
-              path="gallery"
+            <router-link path="gallery">
+              <a class=${classMap({ ...itemClass, "is-active": false })}>
+                <span class="icon has-text-warning">
+                  <i class="fas fa-star"></i>
+                </span>
+                <span>Gallery</span>
+              </a></router-link
             >
-              <span class="icon has-text-warning">
-                <i class="fas fa-star"></i>
-              </span>
-              <span>Gallery</span>
-            </router-link>
 
-            <router-link
-              class=${classMap({ ...itemClass, "is-active": false })}
-              path="about"
-            >
-              <span class="icon has-text-info">
-                <i class="fas fa-info"></i>
-              </span>
-              <span>About</span>
+            <router-link path="about">
+              <a class=${classMap({ ...itemClass, "is-active": false })}>
+                <span class="icon has-text-info">
+                  <i class="fas fa-info"></i>
+                </span>
+                <span>About</span>
+              </a>
             </router-link>
           </div>
 
