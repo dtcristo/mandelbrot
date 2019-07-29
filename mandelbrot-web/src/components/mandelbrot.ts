@@ -33,11 +33,6 @@ export default class Mandelbrot extends BaseElement {
     leading: false
   });
 
-  constructor() {
-    super();
-    console.log("constructor");
-  }
-
   connectedCallback() {
     console.log("connected");
     super.connectedCallback();
@@ -57,21 +52,10 @@ export default class Mandelbrot extends BaseElement {
     this.updateCanvas();
   }
 
-  render() {
-    console.log("render");
-    return html`
-      <canvas
-        @click=${this.handleLeftClick}
-        @contextmenu=${this.handleRightClick}
-      ></canvas>
-    `;
-  }
-
   async handleLeftClick(event: MouseEvent) {
     const multiplier = window.devicePixelRatio || 1;
     const relX = event.pageX - this.$canvas.offsetLeft;
     const relY = event.pageY - this.$canvas.offsetTop;
-    console.log("relX", relX, "relY", relY);
     await untilInit();
     const point = mouseCoords(
       this.$canvas.width,
@@ -109,7 +93,6 @@ export default class Mandelbrot extends BaseElement {
   }
 
   resizeCanvas(): boolean {
-    console.log("resizeCanvas");
     const multiplier = window.devicePixelRatio || 1;
     const width = (this.$canvas.clientWidth * multiplier) | 0;
     const height = (this.$canvas.clientHeight * multiplier) | 0;
@@ -139,5 +122,15 @@ export default class Mandelbrot extends BaseElement {
     );
     const ctx = this.$canvas.getContext("2d");
     ctx && ctx.putImageData(imageData, 0, 0);
+  }
+
+  render() {
+    console.log("render");
+    return html`
+      <canvas
+        @click=${this.handleLeftClick}
+        @contextmenu=${this.handleRightClick}
+      ></canvas>
+    `;
   }
 }
