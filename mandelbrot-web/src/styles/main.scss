@@ -23,20 +23,15 @@ $navbar-breakpoint: $tablet;
 // @import "~bulma/sass/layout/_all.sass";
 @import "~bulma/sass/layout/section.sass";
 
-// x-app {
-//   display: flex;
-//   flex-direction: column;
-//   height: 100vh;
-// }
+x-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-// x-app main {
-//   flex: 1;
-//   display: flex;
-// }
-
-// x-mandelbrot {
-//   flex: 1;
-// }
+x-app > main {
+  flex: 1;
+}
 
 x-mandelbrot canvas {
   display: block;
