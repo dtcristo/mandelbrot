@@ -84,7 +84,7 @@ export default class Guestbook extends BaseComponent {
             </p>
 
             <div class="columns">
-              <div class="column is-half">
+              <div class="column is-two-thirds-tablet is-half-desktop">
                 <form>
                   <div class="field is-horizontal">
                     <div class="field-label is-normal">
@@ -139,7 +139,6 @@ export default class Guestbook extends BaseComponent {
                   </div>
                 </form>
               </div>
-              <div class="column is-hidden"></div>
             </div>
 
             <hr />
