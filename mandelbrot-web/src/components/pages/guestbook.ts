@@ -6,6 +6,7 @@ import BaseComponent from "../base_component";
 
 @customElement("x-guestbook")
 export default class Guestbook extends BaseComponent {
+  @property({ type: String }) name = "";
   @property({ type: String }) messageText = "";
   @property({ type: Array }) messages: Array<any> = [];
   @property({ type: Boolean }) isLoading = true;
@@ -43,6 +44,10 @@ export default class Guestbook extends BaseComponent {
     this.unsubscribe();
   }
 
+  onNameInput(event: any) {
+    this.name = event.target.value;
+  }
+
   onMessageInput(event: any) {
     this.messageText = event.target.value;
   }
@@ -51,9 +56,9 @@ export default class Guestbook extends BaseComponent {
     event.preventDefault();
     const newMessage = this.messageText;
     this.messageText = "";
-    console.log("Adding message: ", newMessage);
     try {
       const docRef = await firestore.collection("messages").add({
+        name: this.name === "" ? null : this.name,
         text: newMessage,
         timestamp: Date.now()
       });
@@ -78,32 +83,67 @@ export default class Guestbook extends BaseComponent {
               Type a short message for the whole world to see.
             </p>
 
-            <form>
-              <div class="field is-grouped">
-                <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Enter your message"
-                    maxlength="100"
-                    @input=${this.onMessageInput}
-                    .value=${this.messageText}
-                  />
-                </div>
-                <div class="control">
-                  <button
-                    class="button is-info"
-                    type="submit"
-                    @click=${this.onMessagePost}
-                    ?disabled=${this.messageText === ""}
-                  >
-                    Post
-                  </button>
-                </div>
+            <div class="columns">
+              <div class="column is-half">
+                <form>
+                  <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label">Name</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <p class="control">
+                          <input
+                            class="input"
+                            type="text"
+                            placeholder="Enter your name"
+                            maxlength="30"
+                            @input=${this.onNameInput}
+                            .value=${this.name}
+                          />
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label">Message</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field">
+                        <p class="control">
+                          <textarea
+                            class="textarea"
+                            placeholder="Enter your message"
+                            maxlength="200"
+                            @input=${this.onMessageInput}
+                            .value=${this.messageText}
+                          ></textarea>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field is-grouped is-grouped-right">
+                    <div class="control">
+                      <button
+                        class="button is-info"
+                        type="submit"
+                        @click=${this.onMessagePost}
+                        ?disabled=${this.messageText === ""}
+                      >
+                        Post message
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
-            </form>
+              <div class="column is-hidden"></div>
+            </div>
 
             <hr />
+            <h2>Visitor messages</h2>
 
             ${this.isLoading
               ? html`
@@ -117,10 +157,14 @@ export default class Guestbook extends BaseComponent {
                       m => m.data().timestamp,
                       "desc"
                     ).map((message: any) => {
-                      const { text, timestamp } = message.data();
+                      const { name, text, timestamp } = message.data();
                       const localeString = new Date(timestamp).toLocaleString();
                       return html`
-                        <li>${localeString} - ${text}</li>
+                        <li>
+                          <em>${localeString}</em> -
+                          <strong>${name ? name : "Anonymous"}</strong> -
+                          <span>${text}</span>
+                        </li>
                       `;
                     })}
                   </ul>
