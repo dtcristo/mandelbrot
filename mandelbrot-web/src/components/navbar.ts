@@ -74,6 +74,15 @@ export default class Navbar extends BaseElement {
                 <span>About</span>
               </a>
             </router-link>
+
+            <router-link path="guestbook">
+              <a class=${classMap({ ...itemClass, "is-active": false })}>
+                <span class="icon has-text-danger">
+                  <i class="fas fa-book"></i>
+                </span>
+                <span>Guestbook</span>
+              </a></router-link
+            >
           </div>
 
           <div class="navbar-end">

@@ -7,6 +7,7 @@ import BaseComponent from "./base_component";
 import "./navbar";
 import Explore from "./pages/explore";
 import Gallery from "./pages/gallery";
+import Guestbook from "./pages/guestbook";
 import About from "./pages/about";
 
 const ROUTES: IRoute[] = [
@@ -17,6 +18,7 @@ const ROUTES: IRoute[] = [
   { path: "explore", redirectTo: "explore/-0.666/0/0/100" },
   { path: "gallery", component: Gallery },
   { path: "about", component: About },
+  { path: "guestbook", component: Guestbook },
   { path: "**", redirectTo: "explore" }
 ];
 

@@ -28,10 +28,7 @@ export default {
       ],
       verbose: true
     }),
-    nodeResolve({
-      browser: true,
-      modulesOnly: true
-    }),
+    nodeResolve({ modulesOnly: true }),
     typescript(),
     postcss({
       extract: true,
