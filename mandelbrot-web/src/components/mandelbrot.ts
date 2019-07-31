@@ -1,5 +1,6 @@
 import { html, customElement, query, PropertyValues } from "lit-element";
 import throttle from "lodash-es/throttle";
+import { Params, queryParentRouterSlot } from "@appnest/web-router";
 
 import BaseElement from "./base_component";
 import init, {
@@ -33,9 +34,34 @@ export default class Mandelbrot extends BaseElement {
     leading: false
   });
 
+  get params(): Params {
+    return queryParentRouterSlot(this)!.match!.params;
+  }
+
+  constructor() {
+    super();
+    console.log("constructor");
+  }
+
   connectedCallback() {
     console.log("connected");
     super.connectedCallback();
+    const { centreX, centreY, zoom, maxIterations } = this.params;
+    console.log(
+      "params",
+      "centreX",
+      centreX,
+      "centreY",
+      centreY,
+      "zoom",
+      zoom,
+      "maxIterations",
+      maxIterations
+    );
+    this.centreX = parseFloat(centreX);
+    this.centreY = parseFloat(centreY);
+    this.zoom = parseInt(zoom);
+    this.maxIterations = parseInt(maxIterations);
     window.addEventListener("resize", this.throttledHandleResize);
   }
 
@@ -70,7 +96,13 @@ export default class Mandelbrot extends BaseElement {
     this.centreY = point.y;
     point.free();
     this.zoom += 1;
-    this.updateCanvas();
+    history.pushState(
+      null,
+      "",
+      `/explore/${this.centreX}/${this.centreY}/${this.zoom}/${
+        this.maxIterations
+      }`
+    );
   }
 
   handleRightClick(event: MouseEvent) {
@@ -81,7 +113,13 @@ export default class Mandelbrot extends BaseElement {
         this.centreX = -0.666;
         this.centreY = 0.0;
       }
-      this.updateCanvas();
+      history.pushState(
+        null,
+        "",
+        `/explore/${this.centreX}/${this.centreY}/${this.zoom}/${
+          this.maxIterations
+        }`
+      );
     }
   }
 
@@ -105,7 +143,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   async updateCanvas() {
-    console.log("updateCanvas");
+    console.log("updateCanvas -----------------------------------------");
     await untilInit();
     const data = renderWasm(
       this.$canvas.width,

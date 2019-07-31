@@ -10,7 +10,11 @@ import Gallery from "./pages/gallery";
 import About from "./pages/about";
 
 const ROUTES: IRoute[] = [
-  { path: "explore", component: Explore },
+  {
+    path: "explore/:centreX/:centreY/:zoom/:maxIterations",
+    component: Explore
+  },
+  { path: "explore", redirectTo: "explore/-0.666/0/0/100" },
   { path: "gallery", component: Gallery },
   { path: "about", component: About },
   { path: "**", redirectTo: "explore" }
