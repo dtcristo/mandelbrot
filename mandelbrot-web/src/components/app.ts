@@ -22,7 +22,7 @@ const ROUTES: IRoute[] = [
 
 @customElement("x-app")
 export default class App extends BaseComponent {
-  @query("router-slot") $routerSlot!: RouterSlot;
+  @query("router-slot") private $routerSlot!: RouterSlot;
 
   firstUpdated(props: PropertyValues) {
     super.firstUpdated(props);
