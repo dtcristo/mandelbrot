@@ -7,6 +7,21 @@ import BaseElement from "./base_component";
 @customElement("x-navbar")
 export default class Navbar extends BaseElement {
   @property() burgerActive = false;
+  @property() activeRoute: string = "explore";
+
+  onNavigationEnd = (e: any) => {
+    this.activeRoute = e.detail.match.fragments.consumed;
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener("navigationend", this.onNavigationEnd);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener("navigationend", this.onNavigationEnd);
+  }
 
   onBurgerClick() {
     console.log("burger clicked");
@@ -49,7 +64,12 @@ export default class Navbar extends BaseElement {
         <div class=${classMap(menuClass)}>
           <div class="navbar-start">
             <router-link path="explore">
-              <a class=${classMap({ ...itemClass, "is-active": false })}>
+              <a
+                class=${classMap({
+                  ...itemClass,
+                  "is-active": this.activeRoute.startsWith("explore")
+                })}
+              >
                 <span class="icon has-text-primary">
                   <i class="fas fa-compass"></i>
                 </span>
@@ -58,7 +78,12 @@ export default class Navbar extends BaseElement {
             >
 
             <router-link path="gallery">
-              <a class=${classMap({ ...itemClass, "is-active": false })}>
+              <a
+                class=${classMap({
+                  ...itemClass,
+                  "is-active": this.activeRoute.startsWith("gallery")
+                })}
+              >
                 <span class="icon has-text-warning">
                   <i class="fas fa-star"></i>
                 </span>
@@ -67,7 +92,12 @@ export default class Navbar extends BaseElement {
             >
 
             <router-link path="about">
-              <a class=${classMap({ ...itemClass, "is-active": false })}>
+              <a
+                class=${classMap({
+                  ...itemClass,
+                  "is-active": this.activeRoute.startsWith("about")
+                })}
+              >
                 <span class="icon has-text-info">
                   <i class="fas fa-info"></i>
                 </span>
@@ -76,7 +106,12 @@ export default class Navbar extends BaseElement {
             </router-link>
 
             <router-link path="guestbook">
-              <a class=${classMap({ ...itemClass, "is-active": false })}>
+              <a
+                class=${classMap({
+                  ...itemClass,
+                  "is-active": this.activeRoute.startsWith("guestbook")
+                })}
+              >
                 <span class="icon has-text-danger">
                   <i class="fas fa-book"></i>
                 </span>
