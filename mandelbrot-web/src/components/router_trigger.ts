@@ -33,7 +33,7 @@ export default class RouterTrigger extends LitElement {
     }
 
     // ignore the click if the target is external to the app
-    if (anchor.origin !== window.location.origin) {
+    if (anchor.origin !== location.origin) {
       return;
     }
 
@@ -49,8 +49,8 @@ export default class RouterTrigger extends LitElement {
 
     // ignore the click if the target URL is a fragment on the current page
     if (
-      anchor.pathname === window.location.pathname &&
-      anchor.search === window.location.search &&
+      anchor.pathname === location.pathname &&
+      anchor.search === location.search &&
       anchor.hash !== ""
     ) {
       return;
@@ -63,11 +63,11 @@ export default class RouterTrigger extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.document.addEventListener("click", this.onClick);
+    document.addEventListener("click", this.onClick);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.document.removeEventListener("click", this.onClick);
+    document.removeEventListener("click", this.onClick);
   }
 }
