@@ -75,7 +75,6 @@ export default class Guestbook extends BaseComponent {
   }
 
   render() {
-    console.log("render");
     return html`
       <section class="section">
         <div class="container">
