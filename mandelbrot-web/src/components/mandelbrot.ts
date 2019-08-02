@@ -23,16 +23,17 @@ async function untilInit() {
 
 @customElement("x-mandelbrot")
 export default class Mandelbrot extends BaseElement {
-  @query("canvas") private $canvas!: HTMLCanvasElement;
-  private throttledHandleResize = throttle(this.handleResize.bind(this), 1000, {
-    leading: false
-  });
-
   centreX = -0.666;
   centreY = 0;
   zoom = 0;
   maxIterations = 100;
   navigatable = false;
+
+  @query("canvas") private $canvas!: HTMLCanvasElement;
+
+  private throttledHandleResize = throttle(this.handleResize.bind(this), 1000, {
+    leading: false
+  });
 
   connectedCallback() {
     super.connectedCallback();
@@ -91,7 +92,7 @@ export default class Mandelbrot extends BaseElement {
     history.pushState(
       null,
       "",
-      `/explore/${this.centreX}/${this.centreY}/${this.zoom}/${
+      `explore/${this.centreX}/${this.centreY}/${this.zoom}/${
         this.maxIterations
       }`
     );

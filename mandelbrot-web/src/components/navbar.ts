@@ -5,10 +5,10 @@ import BaseElement from "./base_component";
 
 @customElement("x-navbar")
 export default class Navbar extends BaseElement {
-  @property() burgerActive = false;
-  @property() activeRoute: string = "explore";
+  @property() private burgerActive = false;
+  @property() private activeRoute = "explore";
 
-  onNavigationEnd = (e: any) => {
+  private onNavigationEnd = (e: any) => {
     this.activeRoute = e.detail.match.fragments.consumed;
   };
 
@@ -23,7 +23,6 @@ export default class Navbar extends BaseElement {
   }
 
   onBurgerClick() {
-    console.log("burger clicked");
     this.burgerActive = !this.burgerActive;
   }
 
@@ -40,9 +39,12 @@ export default class Navbar extends BaseElement {
       "navbar-item": true,
       "is-tab": !this.burgerActive
     };
-
     return html`
-      <nav class="navbar" role="navigation" aria-label="main navigation">
+      <nav
+        class="navbar is-light"
+        role="navigation"
+        aria-label="main navigation"
+      >
         <div class="navbar-brand">
           <a href="explore" class="navbar-item">
             <h1 class="title is-4">mandelbrot</h1>
@@ -59,7 +61,6 @@ export default class Navbar extends BaseElement {
             <span aria-hidden="true"></span>
           </a>
         </div>
-
         <div class=${classMap(menuClass)}>
           <div class="navbar-start">
             <a
@@ -74,7 +75,6 @@ export default class Navbar extends BaseElement {
               </span>
               <span>Explore</span>
             </a>
-
             <a
               href="gallery"
               class=${classMap({
@@ -87,7 +87,6 @@ export default class Navbar extends BaseElement {
               </span>
               <span>Gallery</span>
             </a>
-
             <a
               href="about"
               class=${classMap({
@@ -100,7 +99,6 @@ export default class Navbar extends BaseElement {
               </span>
               <span>About</span>
             </a>
-
             <a
               href="guestbook"
               class=${classMap({
@@ -114,12 +112,11 @@ export default class Navbar extends BaseElement {
               <span>Guestbook</span>
             </a>
           </div>
-
           <div class="navbar-end">
             <div class="navbar-item">
               <div class="buttons">
                 <a
-                  class="button is-light"
+                  class="button"
                   href="https://github.com/dtcristo/mandelbrot"
                   target="_blank"
                 >

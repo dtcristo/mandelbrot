@@ -16,10 +16,10 @@ interface Message {
 
 @customElement("x-guestbook")
 export default class Guestbook extends BaseComponent {
-  @property() name = "";
-  @property() messageText = "";
-  @property() messages: Document<Message>[] = [];
-  @property() isLoading = true;
+  @property() private name = "";
+  @property() private messageText = "";
+  @property() private messages: Document<Message>[] = [];
+  @property() private isLoading = true;
 
   queryData(): () => void {
     return firestore
@@ -83,7 +83,6 @@ export default class Guestbook extends BaseComponent {
             <p>
               Type a short message for the whole world to see.
             </p>
-
             <div class="columns">
               <div class="column is-two-thirds-tablet is-half-desktop">
                 <form>
@@ -106,7 +105,6 @@ export default class Guestbook extends BaseComponent {
                       </div>
                     </div>
                   </div>
-
                   <div class="field is-horizontal">
                     <div class="field-label is-normal">
                       <label class="label">Message</label>
@@ -125,7 +123,6 @@ export default class Guestbook extends BaseComponent {
                       </div>
                     </div>
                   </div>
-
                   <div class="field is-grouped is-grouped-right">
                     <div class="control">
                       <button
@@ -141,10 +138,8 @@ export default class Guestbook extends BaseComponent {
                 </form>
               </div>
             </div>
-
             <hr />
             <h2>Visitor messages</h2>
-
             ${this.isLoading
               ? html`
                   <p>Loading...</p>
