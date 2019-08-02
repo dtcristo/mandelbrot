@@ -11,16 +11,12 @@ export default class Explore extends BaseComponent {
   }
 
   render() {
-    const centreX = parseFloat(this.params.centreX);
-    const centreY = parseFloat(this.params.centreY);
-    const zoom = parseInt(this.params.zoom);
-    const maxIterations = parseInt(this.params.maxIterations);
     return html`
       <x-mandelbrot
-        .centreX=${centreX}
-        .centreY=${centreY}
-        .zoom=${zoom}
-        .maxIterations=${maxIterations}
+        .centreX=${parseFloat(this.params.centreX)}
+        .centreY=${parseFloat(this.params.centreY)}
+        .zoom=${parseInt(this.params.zoom)}
+        .maxIterations=${parseInt(this.params.maxIterations)}
         .navigatable=${true}
       ></x-mandelbrot>
     `;
