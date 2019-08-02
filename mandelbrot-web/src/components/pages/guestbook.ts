@@ -4,34 +4,38 @@ import orderBy from "lodash-es/orderBy";
 
 import BaseComponent from "../base_component";
 
+interface Document<T> extends firebase.firestore.QueryDocumentSnapshot {
+  data(): T;
+}
+
+interface Message {
+  name: string;
+  text: string;
+  timestamp: number;
+}
+
 @customElement("x-guestbook")
 export default class Guestbook extends BaseComponent {
-  @property({ type: String }) name = "";
-  @property({ type: String }) messageText = "";
-  @property({ type: Array }) messages: Array<any> = [];
-  @property({ type: Boolean }) isLoading = true;
+  @property() name = "";
+  @property() messageText = "";
+  @property() messages: Document<Message>[] = [];
+  @property() isLoading = true;
 
-  unsubscribe!: () => void;
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.unsubscribe = firestore
+  queryData(): () => void {
+    return firestore
       .collection("messages")
       .orderBy("timestamp", "desc")
       .limit(20)
       .onSnapshot(snapshot => {
         for (const change of snapshot.docChanges()) {
-          if (change.type === "removed") {
-            console.log("removed", change.doc.id);
-            const index = this.messages.findIndex(
-              message => message.id === change.doc.id
-            );
+          if (change.type === "removed" || change.type === "modified") {
+            const index = this.messages.findIndex(m => m.id === change.doc.id);
             if (index > -1) {
               this.messages.splice(index, 1);
             }
-          } else {
-            console.log("added", change.doc.id);
-            this.messages.push(change.doc);
+          }
+          if (change.type === "added" || change.type === "modified") {
+            this.messages.push(change.doc as Document<Message>);
           }
         }
         this.isLoading = false;
@@ -39,37 +43,35 @@ export default class Guestbook extends BaseComponent {
       });
   }
 
+  queryUnsubscribe!: () => void;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.queryUnsubscribe = this.queryData();
+  }
+
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.unsubscribe();
+    this.queryUnsubscribe();
   }
 
-  onNameInput(event: any) {
-    this.name = event.target.value;
+  onNameInput(event: Event) {
+    this.name = (event.target as HTMLInputElement).value;
   }
 
-  onMessageInput(event: any) {
-    this.messageText = event.target.value;
+  onMessageInput(event: Event) {
+    this.messageText = (event.target as HTMLTextAreaElement).value;
   }
 
-  async onMessagePost(event: any) {
+  onMessagePost(event: any) {
     event.preventDefault();
-    const newMessage = this.messageText;
+    const newMessageText = this.messageText;
     this.messageText = "";
-    try {
-      const docRef = await firestore.collection("messages").add({
-        name: this.name === "" ? null : this.name,
-        text: newMessage,
-        timestamp: Date.now()
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
-  }
-
-  async onMessageDelete(_event: any) {
-    console.log("delete");
+    firestore.collection("messages").add({
+      name: this.name === "" ? null : this.name,
+      text: newMessageText,
+      timestamp: Date.now()
+    });
   }
 
   render() {
@@ -155,7 +157,7 @@ export default class Guestbook extends BaseComponent {
                       this.messages,
                       m => m.data().timestamp,
                       "desc"
-                    ).map((message: any) => {
+                    ).map(message => {
                       const { name, text, timestamp } = message.data();
                       const localeString = new Date(timestamp).toLocaleString();
                       return html`
