@@ -1,6 +1,5 @@
 import { html, customElement, property } from "lit-element";
 import { classMap } from "lit-html/directives/class-map";
-import "@appnest/web-router/router-link";
 
 import BaseElement from "./base_component";
 
@@ -45,9 +44,9 @@ export default class Navbar extends BaseElement {
     return html`
       <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <router-link class="navbar-item" path="explore">
+          <a href="explore" class="navbar-item">
             <h1 class="title is-4">mandelbrot</h1>
-          </router-link>
+          </a>
           <a
             role="button"
             class=${classMap(burgerClass)}
@@ -63,61 +62,57 @@ export default class Navbar extends BaseElement {
 
         <div class=${classMap(menuClass)}>
           <div class="navbar-start">
-            <router-link path="explore">
-              <a
-                class=${classMap({
-                  ...itemClass,
-                  "is-active": this.activeRoute.startsWith("explore")
-                })}
-              >
-                <span class="icon has-text-primary">
-                  <i class="fas fa-compass"></i>
-                </span>
-                <span>Explore</span>
-              </a></router-link
+            <a
+              href="explore"
+              class=${classMap({
+                ...itemClass,
+                "is-active": this.activeRoute.startsWith("explore")
+              })}
             >
+              <span class="icon has-text-primary">
+                <i class="fas fa-compass"></i>
+              </span>
+              <span>Explore</span>
+            </a>
 
-            <router-link path="gallery">
-              <a
-                class=${classMap({
-                  ...itemClass,
-                  "is-active": this.activeRoute.startsWith("gallery")
-                })}
-              >
-                <span class="icon has-text-warning">
-                  <i class="fas fa-star"></i>
-                </span>
-                <span>Gallery</span>
-              </a></router-link
+            <a
+              href="gallery"
+              class=${classMap({
+                ...itemClass,
+                "is-active": this.activeRoute.startsWith("gallery")
+              })}
             >
+              <span class="icon has-text-warning">
+                <i class="fas fa-star"></i>
+              </span>
+              <span>Gallery</span>
+            </a>
 
-            <router-link path="about">
-              <a
-                class=${classMap({
-                  ...itemClass,
-                  "is-active": this.activeRoute.startsWith("about")
-                })}
-              >
-                <span class="icon has-text-info">
-                  <i class="fas fa-info"></i>
-                </span>
-                <span>About</span>
-              </a>
-            </router-link>
-
-            <router-link path="guestbook">
-              <a
-                class=${classMap({
-                  ...itemClass,
-                  "is-active": this.activeRoute.startsWith("guestbook")
-                })}
-              >
-                <span class="icon has-text-danger">
-                  <i class="fas fa-book"></i>
-                </span>
-                <span>Guestbook</span>
-              </a></router-link
+            <a
+              href="about"
+              class=${classMap({
+                ...itemClass,
+                "is-active": this.activeRoute.startsWith("about")
+              })}
             >
+              <span class="icon has-text-info">
+                <i class="fas fa-info"></i>
+              </span>
+              <span>About</span>
+            </a>
+
+            <a
+              href="guestbook"
+              class=${classMap({
+                ...itemClass,
+                "is-active": this.activeRoute.startsWith("guestbook")
+              })}
+            >
+              <span class="icon has-text-danger">
+                <i class="fas fa-book"></i>
+              </span>
+              <span>Guestbook</span>
+            </a>
           </div>
 
           <div class="navbar-end">

@@ -5,6 +5,7 @@ import { RouterSlot } from "@appnest/web-router/router-slot";
 
 import BaseComponent from "./base_component";
 import "./navbar";
+import "./router_trigger";
 import Explore from "./pages/explore";
 import Gallery from "./pages/gallery";
 import Guestbook from "./pages/guestbook";
@@ -38,6 +39,7 @@ export default class App extends BaseComponent {
       </header>
       <main role="main">
         <router-slot></router-slot>
+        <router-trigger></router-trigger>
       </main>
     `;
   }
