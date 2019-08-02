@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@appnest/web-router": "^1.3.7",
+    "@fortawesome/fontawesome-free": "^5.10.0",
     "bulma": "^0.7.5",
     "firebase": "^6.3.3",
     "lit-element": "^2.2.1",
