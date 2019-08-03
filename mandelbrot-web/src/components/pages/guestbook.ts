@@ -29,17 +29,14 @@ export default class Guestbook extends BaseComponent {
       .onSnapshot(snapshot => {
         for (const change of snapshot.docChanges()) {
           if (change.type === "removed" || change.type === "modified") {
-            const index = this.messages.findIndex(m => m.id === change.doc.id);
-            if (index > -1) {
-              this.messages.splice(index, 1);
-            }
+            this.messages = this.messages.filter(m => m.id !== change.doc.id);
           }
           if (change.type === "added" || change.type === "modified") {
-            this.messages.push(change.doc as Document<Message>);
+            this.messages = [...this.messages, change.doc as Document<Message>];
           }
         }
+        this.messages = orderBy(this.messages, m => m.data().timestamp, "desc");
         this.isLoading = false;
-        this.requestUpdate();
       });
   }
 
@@ -147,11 +144,7 @@ export default class Guestbook extends BaseComponent {
               : this.messages.length > 0
               ? html`
                   <ul>
-                    ${orderBy(
-                      this.messages,
-                      m => m.data().timestamp,
-                      "desc"
-                    ).map(message => {
+                    ${this.messages.map(message => {
                       const { name, text, timestamp } = message.data();
                       const localeString = new Date(timestamp).toLocaleString();
                       return html`
