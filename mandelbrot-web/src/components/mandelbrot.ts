@@ -1,5 +1,5 @@
 import { html, customElement, query, PropertyValues } from "lit-element";
-import throttle from "lodash-es/throttle";
+import { throttle } from "lodash-es";
 
 import BaseElement from "./base_component";
 import init, {

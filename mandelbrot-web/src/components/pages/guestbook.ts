@@ -1,6 +1,6 @@
 import { html, customElement, property } from "lit-element";
 import { firestore } from "../../firebase";
-import orderBy from "lodash-es/orderBy";
+import { orderBy } from "lodash-es";
 
 import BaseComponent from "../base_component";
 
