@@ -1,6 +1,29 @@
 import { html, customElement } from "lit-element";
 
 import BaseComponent from "../base_component";
+import "./../gallery_card";
+import { MandelbrotLocation } from "../../types";
+
+const GALLERY: MandelbrotLocation[] = [
+  {
+    centreX: -1.0276694024680975,
+    centreY: -0.3612717525543448,
+    zoom: 9,
+    maxIterations: 600
+  },
+  {
+    centreX: -1.5074780564299812,
+    centreY: -1.726559291452974e-10,
+    zoom: 27,
+    maxIterations: 600
+  },
+  {
+    centreX: 0.28601780084978073,
+    centreY: -0.011539213838632968,
+    zoom: 13,
+    maxIterations: 600
+  }
+];
 
 @customElement("x-gallery")
 export default class Gallery extends BaseComponent {
@@ -16,28 +39,16 @@ export default class Gallery extends BaseComponent {
               lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui.
               Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
             </p>
-            <h2>Second level</h2>
-            <p>
-              Curabitur accumsan turpis pharetra
-              <strong>augue tincidunt</strong> blandit. Quisque condimentum
-              maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna
-              vel cursus venenatis. Suspendisse potenti. Etiam mattis sem
-              rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et
-              neque nisl.
-            </p>
-            <ul>
-              <li>
-                In fermentum leo eu lectus mollis, quis dictum mi aliquet.
-              </li>
-              <li>
-                Morbi eu nulla lobortis, lobortis est in, fringilla felis.
-              </li>
-              <li>
-                Aliquam nec felis in sapien venenatis viverra fermentum nec
-                lectus.
-              </li>
-              <li>Ut non enim metus.</li>
-            </ul>
+          </div>
+
+          <div class="columns is-multiline is-centered">
+            ${GALLERY.map(
+              mandelbrot => html`
+                <div class="column is-10-tablet is-5-fullhd">
+                  <x-gallery-card .mandelbrot=${mandelbrot}></x-gallery-card>
+                </div>
+              `
+            )}
           </div>
         </div>
       </section>
