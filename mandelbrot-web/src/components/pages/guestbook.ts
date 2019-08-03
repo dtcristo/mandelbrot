@@ -9,7 +9,7 @@ interface Document<T> extends firebase.firestore.QueryDocumentSnapshot {
 }
 
 interface Message {
-  name: string;
+  name?: string;
   text: string;
   timestamp: number;
 }
@@ -71,6 +71,92 @@ export default class Guestbook extends BaseComponent {
     });
   }
 
+  renderForm() {
+    return html`
+      <form>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="name">Name</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input
+                  id="name"
+                  class="input"
+                  type="text"
+                  placeholder="Enter your name"
+                  maxlength="30"
+                  @input=${this.onNameInput}
+                  .value=${this.name}
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="message">Message</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <textarea
+                  id="message"
+                  class="textarea"
+                  placeholder="Enter your message"
+                  maxlength="200"
+                  @input=${this.onMessageInput}
+                  .value=${this.messageText}
+                ></textarea>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="field is-grouped is-grouped-right">
+          <div class="control">
+            <button
+              class="button is-info"
+              type="submit"
+              @click=${this.onMessagePost}
+              ?disabled=${this.messageText === ""}
+            >
+              Post message
+            </button>
+          </div>
+        </div>
+      </form>
+    `;
+  }
+
+  renderMessages() {
+    if (this.isLoading) {
+      return html`
+        <p>Loading...</p>
+      `;
+    } else if (this.messages.length > 0) {
+      return html`
+        <ul>
+          ${this.messages.map(message => {
+            const { name, text, timestamp } = message.data();
+            const localeString = new Date(timestamp).toLocaleString();
+            return html`
+              <li>
+                <em>${localeString}</em> -
+                <strong>${name ? name : "Anonymous"}</strong> -
+                <span>${text}</span>
+              </li>
+            `;
+          })}
+        </ul>
+      `;
+    } else {
+      return html`
+        <p>No messages yet.</p>
+      `;
+    }
+  }
+
   render() {
     return html`
       <section class="section">
@@ -80,86 +166,16 @@ export default class Guestbook extends BaseComponent {
             <p>
               Type a short message for the whole world to see.
             </p>
-            <div class="columns">
-              <div class="column is-two-thirds-tablet is-half-desktop">
-                <form>
-                  <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                      <label class="label">Name</label>
-                    </div>
-                    <div class="field-body">
-                      <div class="field">
-                        <p class="control">
-                          <input
-                            class="input"
-                            type="text"
-                            placeholder="Enter your name"
-                            maxlength="30"
-                            @input=${this.onNameInput}
-                            .value=${this.name}
-                          />
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="field is-horizontal">
-                    <div class="field-label is-normal">
-                      <label class="label">Message</label>
-                    </div>
-                    <div class="field-body">
-                      <div class="field">
-                        <p class="control">
-                          <textarea
-                            class="textarea"
-                            placeholder="Enter your message"
-                            maxlength="200"
-                            @input=${this.onMessageInput}
-                            .value=${this.messageText}
-                          ></textarea>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="field is-grouped is-grouped-right">
-                    <div class="control">
-                      <button
-                        class="button is-info"
-                        type="submit"
-                        @click=${this.onMessagePost}
-                        ?disabled=${this.messageText === ""}
-                      >
-                        Post message
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
+          </div>
+          <div class="columns">
+            <div class="column is-two-thirds-tablet is-half-desktop">
+              ${this.renderForm()}
             </div>
-            <hr />
+          </div>
+          <hr />
+          <div class="content">
             <h2>Visitor messages</h2>
-            ${this.isLoading
-              ? html`
-                  <p>Loading...</p>
-                `
-              : this.messages.length > 0
-              ? html`
-                  <ul>
-                    ${this.messages.map(message => {
-                      const { name, text, timestamp } = message.data();
-                      const localeString = new Date(timestamp).toLocaleString();
-                      return html`
-                        <li>
-                          <em>${localeString}</em> -
-                          <strong>${name ? name : "Anonymous"}</strong> -
-                          <span>${text}</span>
-                        </li>
-                      `;
-                    })}
-                  </ul>
-                `
-              : html`
-                  <p>No messages yet.</p>
-                `}
+            ${this.renderMessages()}
           </div>
         </div>
       </section>
