@@ -3,9 +3,19 @@ import {
   faCompass,
   faStar,
   faInfo,
-  faBook
+  faBook,
+  faHeart
 } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faGithubAlt } from "@fortawesome/free-brands-svg-icons";
 
-library.add(faCompass, faStar, faInfo, faBook, faGithubAlt);
+library.add(
+  faCompass,
+  faStar,
+  faInfo,
+  faBook,
+  faHeart,
+  faHeartOutline,
+  faGithubAlt
+);
 dom.watch();
