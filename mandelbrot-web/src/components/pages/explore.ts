@@ -2,7 +2,7 @@ import { html, customElement } from "lit-element";
 import { Params, queryParentRouterSlot } from "@appnest/web-router";
 
 import BaseComponent from "../base_component";
-import "./../mandelbrot";
+import "../mandelbrot";
 
 @customElement("x-explore")
 export default class Explore extends BaseComponent {

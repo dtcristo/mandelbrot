@@ -1,11 +1,18 @@
-import { html, customElement, query, PropertyValues } from "lit-element";
+import {
+  html,
+  customElement,
+  query,
+  PropertyValues,
+  property
+} from "lit-element";
 import { throttle } from "lodash-es";
 
 import BaseElement from "./base_component";
 import init, {
-  render as renderWasm,
   mouseCoords
-} from "../../../mandelbrot-core/pkg";
+} from "../../../mandelbrot-core/pkg/mandelbrot_core";
+
+const worker = new Worker("worker.js");
 
 let initPromise: Promise<void> | undefined;
 
@@ -21,6 +28,8 @@ async function untilInit() {
   }
 }
 
+let nextInstanceId = 0;
+
 @customElement("x-mandelbrot")
 export default class Mandelbrot extends BaseElement {
   centreX = -0.666;
@@ -28,27 +37,54 @@ export default class Mandelbrot extends BaseElement {
   zoom = 0;
   maxIterations = 100;
   navigatable = false;
-
+  @property() private imageData?: ImageData;
   @query("canvas") private $canvas!: HTMLCanvasElement;
+  private instanceId = nextInstanceId++;
 
   private throttledHandleResize = throttle(this.handleResize.bind(this), 1000, {
     leading: false
   });
 
+  private handleWorkerMessage = (event: MessageEvent) => {
+    if (event.data.instanceId !== this.instanceId) {
+      return;
+    }
+    this.imageData = event.data.imageData;
+  };
+
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener("resize", this.throttledHandleResize);
+    worker.addEventListener("message", this.handleWorkerMessage);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener("resize", this.throttledHandleResize);
+    worker.removeEventListener("message", this.handleWorkerMessage);
   }
 
   firstUpdated(props: PropertyValues) {
     super.firstUpdated(props);
     this.resizeCanvas();
+    this.triggerWorker();
+  }
+
+  updated(props: PropertyValues) {
+    super.updated(props);
     this.renderCanvas();
+  }
+
+  triggerWorker() {
+    worker.postMessage({
+      instanceId: this.instanceId,
+      width: this.$canvas.width,
+      height: this.$canvas.height,
+      centreX: this.centreX,
+      centreY: this.centreY,
+      zoom: this.zoom,
+      maxIterations: this.maxIterations
+    });
   }
 
   async handleLeftClick(event: MouseEvent) {
@@ -100,7 +136,7 @@ export default class Mandelbrot extends BaseElement {
 
   handleResize() {
     if (this.resizeCanvas()) {
-      this.renderCanvas();
+      this.triggerWorker();
     }
   }
 
@@ -116,23 +152,11 @@ export default class Mandelbrot extends BaseElement {
     return false;
   }
 
-  async renderCanvas() {
-    await untilInit();
-    const data = renderWasm(
-      this.$canvas.width,
-      this.$canvas.height,
-      this.centreX,
-      this.centreY,
-      this.zoom,
-      this.maxIterations
-    );
-    const imageData = new ImageData(
-      new Uint8ClampedArray(data),
-      this.$canvas.width,
-      this.$canvas.height
-    );
-    const ctx = this.$canvas.getContext("2d");
-    ctx && ctx.putImageData(imageData, 0, 0);
+  renderCanvas() {
+    if (this.imageData) {
+      const ctx = this.$canvas.getContext("2d");
+      ctx && ctx.putImageData(this.imageData, 0, 0);
+    }
   }
 
   render() {

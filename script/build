@@ -7,5 +7,4 @@ wasm-pack build mandelbrot-core --target web
 # Build web frontend
 cd mandelbrot-web/
 rm -rf dist/
-# node_modules/.bin/tsc --noEmit
 node_modules/.bin/rollup --config
