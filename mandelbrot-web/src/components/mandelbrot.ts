@@ -12,7 +12,7 @@ import init, { pixelToCoords } from "../../../mandelbrot-core/pkg";
 
 const worker = new Worker("worker.js");
 
-let initPromise = new Promise(async resolve => {
+const initPromise = new Promise(async resolve => {
   await init("mandelbrot_core_bg.wasm");
   resolve();
 });
