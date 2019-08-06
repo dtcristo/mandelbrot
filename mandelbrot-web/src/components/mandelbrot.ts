@@ -4,22 +4,13 @@ import { throttle } from "lodash-es";
 import BaseElement from "./base_component";
 import init, {
   render as renderWasm,
-  mouseCoords
+  pixelToCoords
 } from "../../../mandelbrot-core/pkg";
 
-let initPromise: Promise<void> | undefined;
-
-async function untilInit() {
-  if (initPromise) {
-    await initPromise;
-  } else {
-    initPromise = new Promise(async resolve => {
-      await init("mandelbrot_core_bg.wasm");
-      resolve();
-    });
-    await initPromise;
-  }
-}
+let initPromise = new Promise(async resolve => {
+  await init("mandelbrot_core_bg.wasm");
+  resolve();
+});
 
 @customElement("x-mandelbrot")
 export default class Mandelbrot extends BaseElement {
@@ -56,15 +47,15 @@ export default class Mandelbrot extends BaseElement {
       const multiplier = window.devicePixelRatio || 1;
       const relX = event.pageX - this.$canvas.offsetLeft;
       const relY = event.pageY - this.$canvas.offsetTop;
-      await untilInit();
-      const point = mouseCoords(
+      await initPromise;
+      const point = pixelToCoords(
+        relY * multiplier,
+        relX * multiplier,
         this.$canvas.width,
         this.$canvas.height,
         this.centreX,
         this.centreY,
-        this.zoom,
-        relX * multiplier,
-        relY * multiplier
+        this.zoom
       );
       this.centreX = point.x;
       this.centreY = point.y;
@@ -117,7 +108,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   async renderCanvas() {
-    await untilInit();
+    await initPromise;
     const data = renderWasm(
       this.$canvas.width,
       this.$canvas.height,
