@@ -23,7 +23,6 @@ export default class GalleryCard extends BaseElement {
           .zoom=${this.mandelbrot.zoom}
           .maxIterations=${this.mandelbrot.maxIterations}
         ></x-mandelbrot>
-        <!-- <div class="card-content"></div> -->
         <footer class="card-footer">
           <a href=${this.path()} class="card-footer-item">
             <span class="icon has-text-primary">
@@ -31,18 +30,6 @@ export default class GalleryCard extends BaseElement {
             </span>
             <span>Explore</span>
           </a>
-          <!-- <a class="card-footer-item">
-            <span class="icon has-text-danger">
-              <i class="fas fa-heart"></i>
-            </span>
-            <span>Like</span>
-          </a> -->
-          <!-- <a class="card-footer-item">
-            <span class="icon has-text-danger">
-              <i class="far fa-heart"></i>
-            </span>
-            <span>Like</span>
-          </a> -->
         </footer>
       </div>
     `;

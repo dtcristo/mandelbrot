@@ -8,25 +8,14 @@ import {
 import { throttle } from "lodash-es";
 
 import BaseElement from "./base_component";
-import init, {
-  mouseCoords
-} from "../../../mandelbrot-core/pkg/mandelbrot_core";
+import init, { pixelToCoords } from "../../../mandelbrot-core/pkg";
 
 const worker = new Worker("worker.js");
 
-let initPromise: Promise<void> | undefined;
-
-async function untilInit() {
-  if (initPromise) {
-    await initPromise;
-  } else {
-    initPromise = new Promise(async resolve => {
-      await init("mandelbrot_core_bg.wasm");
-      resolve();
-    });
-    await initPromise;
-  }
-}
+let initPromise = new Promise(async resolve => {
+  await init("mandelbrot_core_bg.wasm");
+  resolve();
+});
 
 let nextInstanceId = 0;
 
@@ -92,15 +81,15 @@ export default class Mandelbrot extends BaseElement {
       const multiplier = window.devicePixelRatio || 1;
       const relX = event.pageX - this.$canvas.offsetLeft;
       const relY = event.pageY - this.$canvas.offsetTop;
-      await untilInit();
-      const point = mouseCoords(
+      await initPromise;
+      const point = pixelToCoords(
+        relY * multiplier,
+        relX * multiplier,
         this.$canvas.width,
         this.$canvas.height,
         this.centreX,
         this.centreY,
-        this.zoom,
-        relX * multiplier,
-        relY * multiplier
+        this.zoom
       );
       this.centreX = point.x;
       this.centreY = point.y;

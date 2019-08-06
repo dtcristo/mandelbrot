@@ -13,7 +13,7 @@ pub fn render(
     zoom: usize,
     max_iterations: usize,
 ) -> Vec<u8> {
-    let palette: Vec<u32> = build_palette(max_iterations);
+    let palette = build_palette(max_iterations);
     let (x_min, x_max, y_min, y_max) = frame_bounds(width, height, centre_x, centre_y, zoom);
     let data = (0..height)
         .map(|row| {
@@ -102,18 +102,18 @@ pub struct Point {
     pub y: f64,
 }
 
-#[wasm_bindgen(js_name = mouseCoords)]
-pub fn mouse_coords(
+#[wasm_bindgen(js_name = pixelToCoords)]
+pub fn pixel_to_coords(
+    row: usize,
+    column: usize,
     width: usize,
     height: usize,
     centre_x: f64,
     centre_y: f64,
     zoom: usize,
-    mouse_x: f32,
-    mouse_y: f32,
 ) -> Point {
     let (x_min, x_max, y_min, y_max) = frame_bounds(width, height, centre_x, centre_y, zoom);
-    let x = (f64::from(mouse_x) / width as f64) * (x_max - x_min) + x_min;
-    let y = (f64::from(mouse_y) / height as f64) * (y_min - y_max) + y_max;
+    let x = current_x(column, width, x_min, x_max);
+    let y = current_y(row, height, y_min, y_max);
     Point { x, y }
 }
