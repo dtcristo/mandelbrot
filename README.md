@@ -3,7 +3,7 @@
 [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) in Rust targeting
 WebAssembly, online at [mandelbrot-rust.web.app](https://mandelbrot-rust.web.app/).
 
-![mandelbrot](images/mandelbrot.png)
+[![mandelbrot](images/mandelbrot.png)](https://mandelbrot-rust.web.app/)
 
 ## Controls
 
