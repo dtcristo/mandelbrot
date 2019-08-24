@@ -46,7 +46,7 @@ export default class Navbar extends BaseElement {
         aria-label="main navigation"
       >
         <div class="navbar-brand">
-          <a href="explore" class="navbar-item">
+          <a href="" class="navbar-item">
             <h1 class="title is-4">mandelbrot</h1>
           </a>
           <a
