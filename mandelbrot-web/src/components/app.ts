@@ -1,5 +1,5 @@
 import { customElement, html, query, PropertyValues } from "lit-element";
-import { Router } from "@vaadin/router";
+import { Router } from "../vendor/vaadin-router";
 
 import BaseComponent from "./base_component";
 import "./navbar";
@@ -8,7 +8,7 @@ import "./pages/gallery";
 import "./pages/guestbook";
 import "./pages/about";
 
-const ROUTES = [
+const ROUTES: Router.Route[] = [
   { path: "explore", redirect: "explore/-0.666/0/0/100" },
   {
     path: "explore/:centreX/:centreY/:zoom/:maxIterations",
@@ -23,11 +23,11 @@ const ROUTES = [
 @customElement("x-app")
 export default class App extends BaseComponent {
   @query("main") private $main!: HTMLElement;
-  private router: any;
+  private router!: Router;
 
   firstUpdated(props: PropertyValues) {
     super.firstUpdated(props);
-    this.router = new Router(this.$main);
+    this.router = new Router(this.$main, { purgeOutlet: true });
     this.router.setRoutes(ROUTES);
   }
 
