@@ -2,7 +2,7 @@ import { html, customElement, property } from "lit-element";
 
 import BaseElement from "./base_component";
 import "./mandelbrot";
-import { MandelbrotLocation } from "../types";
+import { MandelbrotLocation } from "./mandelbrot";
 
 @customElement("x-gallery-card")
 export default class GalleryCard extends BaseElement {

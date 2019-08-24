@@ -19,6 +19,13 @@ const initPromise = new Promise(async resolve => {
 
 let nextInstanceId = 0;
 
+export interface MandelbrotLocation {
+  centreX: number;
+  centreY: number;
+  zoom: number;
+  maxIterations: number;
+}
+
 @customElement("x-mandelbrot")
 export default class Mandelbrot extends BaseElement {
   centreX = -0.666;

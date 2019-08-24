@@ -2,7 +2,7 @@ import { html, customElement } from "lit-element";
 
 import BaseComponent from "../base_component";
 import "../gallery_card";
-import { MandelbrotLocation } from "../../types";
+import { MandelbrotLocation } from "../mandelbrot";
 
 const GALLERY: MandelbrotLocation[] = [
   {
