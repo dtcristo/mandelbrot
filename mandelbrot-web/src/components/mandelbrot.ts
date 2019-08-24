@@ -124,10 +124,9 @@ export default class Mandelbrot extends BaseElement {
     history.pushState(
       null,
       "",
-      `explore/${this.centreX}/${this.centreY}/${this.zoom}/${
-        this.maxIterations
-      }`
+      `explore/${this.centreX}/${this.centreY}/${this.zoom}/${this.maxIterations}`
     );
+    this.triggerWorker();
   }
 
   handleResize() {

@@ -1,35 +1,34 @@
 import { customElement, html, query, PropertyValues } from "lit-element";
-import "@appnest/web-router";
-import { IRoute } from "@appnest/web-router";
-import { RouterSlot } from "@appnest/web-router/router-slot";
+import { Router } from "@vaadin/router";
 
 import BaseComponent from "./base_component";
 import "./navbar";
-import "./router_trigger";
-import Explore from "./pages/explore";
-import Gallery from "./pages/gallery";
-import Guestbook from "./pages/guestbook";
-import About from "./pages/about";
+import "./pages/explore";
+import "./pages/gallery";
+import "./pages/guestbook";
+import "./pages/about";
 
-const ROUTES: IRoute[] = [
+const ROUTES = [
+  { path: "explore", redirect: "explore/-0.666/0/0/100" },
   {
     path: "explore/:centreX/:centreY/:zoom/:maxIterations",
-    component: Explore
+    component: "x-explore"
   },
-  { path: "explore", redirectTo: "explore/-0.666/0/0/100" },
-  { path: "gallery", component: Gallery },
-  { path: "about", component: About },
-  { path: "guestbook", component: Guestbook },
-  { path: "**", redirectTo: "explore" }
+  { path: "gallery", component: "x-gallery" },
+  { path: "about", component: "x-about" },
+  { path: "guestbook", component: "x-guestbook" },
+  { path: "(.*)", redirect: "explore" }
 ];
 
 @customElement("x-app")
 export default class App extends BaseComponent {
-  @query("router-slot") private $routerSlot!: RouterSlot;
+  @query("main") private $main!: HTMLElement;
+  private router: any;
 
   firstUpdated(props: PropertyValues) {
     super.firstUpdated(props);
-    this.$routerSlot.routes = ROUTES;
+    this.router = new Router(this.$main);
+    this.router.setRoutes(ROUTES);
   }
 
   render() {
@@ -37,10 +36,7 @@ export default class App extends BaseComponent {
       <header>
         <x-navbar></x-navbar>
       </header>
-      <main role="main">
-        <router-slot></router-slot>
-        <router-trigger></router-trigger>
-      </main>
+      <main role="main"></main>
     `;
   }
 }
