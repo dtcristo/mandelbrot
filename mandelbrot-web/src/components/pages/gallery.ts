@@ -18,9 +18,27 @@ const GALLERY: MandelbrotLocation[] = [
     maxIterations: 600
   },
   {
+    centreX: -1.1623409913232519,
+    centreY: 0.2923676909198125,
+    zoom: 13,
+    maxIterations: 600
+  },
+  {
     centreX: 0.28601780084978073,
     centreY: -0.011539213838632968,
     zoom: 13,
+    maxIterations: 600
+  },
+  {
+    centreX: -1.1533821764107208,
+    centreY: 0.27511268064200173,
+    zoom: 17,
+    maxIterations: 600
+  },
+  {
+    centreX: 0.37091327811244995,
+    centreY: -0.15500282379518046,
+    zoom: 8,
     maxIterations: 600
   }
 ];
