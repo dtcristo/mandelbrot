@@ -4,9 +4,10 @@ import {
   faStar,
   faInfo,
   faBook,
-  faHeart
+  faSpinner
+  // faHeart,
 } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
+// import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { faGithubAlt } from "@fortawesome/free-brands-svg-icons";
 
 library.add(
@@ -14,8 +15,9 @@ library.add(
   faStar,
   faInfo,
   faBook,
-  faHeart,
-  faHeartOutline,
+  faSpinner,
+  // faHeart,
+  // faHeartOutline,
   faGithubAlt
 );
 dom.watch();
