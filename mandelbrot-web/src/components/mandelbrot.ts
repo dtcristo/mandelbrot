@@ -33,7 +33,7 @@ export default class Mandelbrot extends BaseElement {
   zoom = 0;
   maxIterations = 100;
   navigatable = false;
-  @property() private imageData?: ImageData;
+  @property({ attribute: false }) private imageData?: ImageData;
   @query("canvas") private $canvas!: HTMLCanvasElement;
   private instanceId = nextInstanceId++;
 

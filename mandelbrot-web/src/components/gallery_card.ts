@@ -6,12 +6,10 @@ import { MandelbrotLocation } from "./mandelbrot";
 
 @customElement("x-gallery-card")
 export default class GalleryCard extends BaseElement {
-  @property() mandelbrot!: MandelbrotLocation;
+  @property({ attribute: false }) mandelbrot!: MandelbrotLocation;
 
-  path(): string {
-    return `explore/${this.mandelbrot.centreX}/${this.mandelbrot.centreY}/${
-      this.mandelbrot.zoom
-    }/${this.mandelbrot.maxIterations}`;
+  get path(): string {
+    return `explore/${this.mandelbrot.centreX}/${this.mandelbrot.centreY}/${this.mandelbrot.zoom}/${this.mandelbrot.maxIterations}`;
   }
 
   render() {
@@ -24,7 +22,7 @@ export default class GalleryCard extends BaseElement {
           .maxIterations=${this.mandelbrot.maxIterations}
         ></x-mandelbrot>
         <footer class="card-footer">
-          <a href=${this.path()} class="card-footer-item">
+          <a href=${this.path} class="card-footer-item">
             <span class="icon has-text-primary">
               <i class="fas fa-compass"></i>
             </span>
