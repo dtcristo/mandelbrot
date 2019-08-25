@@ -5,21 +5,27 @@ import BaseElement from "./base_component";
 
 @customElement("x-navbar")
 export default class Navbar extends BaseElement {
-  @property() private burgerActive = false;
-  @property() private activeRoute = "explore";
+  @property({ attribute: false }) private burgerActive = false;
+  @property({ attribute: false }) private activeComponent = "x-explore";
 
-  private onNavigationEnd = (e: any) => {
-    this.activeRoute = e.detail.match.fragments.consumed;
+  private handleLocationChanged = (event: any) => {
+    this.activeComponent = event.detail.location.route.component;
   };
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener("navigationend", this.onNavigationEnd);
+    window.addEventListener(
+      "vaadin-router-location-changed",
+      this.handleLocationChanged
+    );
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener("navigationend", this.onNavigationEnd);
+    window.removeEventListener(
+      "vaadin-router-location-changed",
+      this.handleLocationChanged
+    );
   }
 
   onBurgerClick() {
@@ -67,7 +73,7 @@ export default class Navbar extends BaseElement {
               href="explore"
               class=${classMap({
                 ...itemClass,
-                "is-active": this.activeRoute.startsWith("explore")
+                "is-active": this.activeComponent === "x-explore"
               })}
             >
               <span class="icon has-text-primary">
@@ -79,7 +85,7 @@ export default class Navbar extends BaseElement {
               href="gallery"
               class=${classMap({
                 ...itemClass,
-                "is-active": this.activeRoute.startsWith("gallery")
+                "is-active": this.activeComponent === "x-gallery"
               })}
             >
               <span class="icon has-text-warning">
@@ -91,7 +97,7 @@ export default class Navbar extends BaseElement {
               href="about"
               class=${classMap({
                 ...itemClass,
-                "is-active": this.activeRoute.startsWith("about")
+                "is-active": this.activeComponent === "x-about"
               })}
             >
               <span class="icon has-text-info">
@@ -103,7 +109,7 @@ export default class Navbar extends BaseElement {
               href="guestbook"
               class=${classMap({
                 ...itemClass,
-                "is-active": this.activeRoute.startsWith("guestbook")
+                "is-active": this.activeComponent === "x-guestbook"
               })}
             >
               <span class="icon has-text-danger">
