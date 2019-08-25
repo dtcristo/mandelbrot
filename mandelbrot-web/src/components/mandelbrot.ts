@@ -26,14 +26,16 @@ export interface MandelbrotLocation {
 
 @customElement("x-mandelbrot")
 export default class Mandelbrot extends BaseElement {
-  worker = new Worker("worker.js");
   centreX = -0.666;
   centreY = 0;
   zoom = 0;
   maxIterations = 100;
   navigable = false;
+  @property({ attribute: false }) private isLoading = true;
   @property({ attribute: false }) private imageData?: ImageData;
+  @query(".overlay-container") private $overlayContainer!: HTMLElement;
   @query("canvas") private $canvas!: HTMLCanvasElement;
+  private worker = new Worker("worker.js");
   private instanceId = nextInstanceId++;
 
   private throttledHandleResize = throttle(this.handleResize.bind(this), 1000, {
@@ -44,6 +46,7 @@ export default class Mandelbrot extends BaseElement {
     if (event.data.instanceId !== this.instanceId) {
       return;
     }
+    this.isLoading = false;
     this.imageData = event.data.imageData;
   };
 
@@ -71,6 +74,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   triggerWorker() {
+    this.isLoading = true;
     this.worker.postMessage({
       instanceId: this.instanceId,
       width: this.$canvas.width,
@@ -85,8 +89,8 @@ export default class Mandelbrot extends BaseElement {
   async handleLeftClick(event: MouseEvent) {
     if (this.navigable) {
       const multiplier = window.devicePixelRatio || 1;
-      const relX = event.pageX - this.$canvas.offsetLeft;
-      const relY = event.pageY - this.$canvas.offsetTop;
+      const relX = event.pageX - this.$overlayContainer.offsetLeft;
+      const relY = event.pageY - this.$overlayContainer.offsetTop;
       await initPromise;
       const point = pixelToCoords(
         relY * multiplier,
@@ -155,10 +159,19 @@ export default class Mandelbrot extends BaseElement {
 
   render() {
     return html`
-      <canvas
-        @click=${this.handleLeftClick}
-        @contextmenu=${this.handleRightClick}
-      ></canvas>
+      <div class="overlay-container">
+        ${this.isLoading
+          ? html`
+              <span class="overlay icon is-large has-text-grey-light">
+                <i class="fas fa-spinner fa-spin fa-3x"></i>
+              </span>
+            `
+          : null}
+        <canvas
+          @click=${this.handleLeftClick}
+          @contextmenu=${this.handleRightClick}
+        ></canvas>
+      </div>
     `;
   }
 }
