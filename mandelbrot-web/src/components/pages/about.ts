@@ -11,33 +11,69 @@ export default class About extends BaseComponent {
           <div class="content">
             <h1>About</h1>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              accumsan, metus ultrices eleifend gravida, nulla nunc varius
-              lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui.
-              Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
+              The
+              <a
+                href="https://en.wikipedia.org/wiki/Mandelbrot_set"
+                target="_blank"
+                >Mandelbrot set</a
+              >
+              is a mathematical concept that can produce amazing
+              <a href="https://en.wikipedia.org/wiki/Fractal" target="_blank"
+                >fractal</a
+              >
+              patterns that you see here.
             </p>
-            <h2>Second level</h2>
-            <p>
-              Curabitur accumsan turpis pharetra
-              <strong>augue tincidunt</strong> blandit. Quisque condimentum
-              maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna
-              vel cursus venenatis. Suspendisse potenti. Etiam mattis sem
-              rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et
-              neque nisl.
-            </p>
-            <ul>
-              <li>
-                In fermentum leo eu lectus mollis, quis dictum mi aliquet.
-              </li>
-              <li>
-                Morbi eu nulla lobortis, lobortis est in, fringilla felis.
-              </li>
-              <li>
-                Aliquam nec felis in sapien venenatis viverra fermentum nec
-                lectus.
-              </li>
-              <li>Ut non enim metus.</li>
-            </ul>
+            <div class="columns is-multiline is-centered">
+              <div class="column is-10-tablet is-5-fullhd">
+                <x-gallery-card
+                  .mandelbrot=${{
+                    centreX: -0.666,
+                    centreY: 0,
+                    zoom: 0,
+                    maxIterations: 100
+                  }}
+                ></x-gallery-card>
+              </div>
+            </div>
+
+            <div class="content">
+              <p>
+                This is a project developed by
+                <a href="https://dtcristo.com/" target="_blank"
+                  >David Cristofaro</a
+                >.
+              </p>
+              <h2>Controls</h2>
+              <p>
+                While <a href="explore">exploring</a> the Mandelbrot set, use
+                the following controls to navigate.
+              </p>
+              <ul>
+                <li>Left click to zoom in.</li>
+                <li>Right click to zoom out.</li>
+              </ul>
+
+              <h2>Implementation</h2>
+              <p>
+                Rendering fractals like this can be a computationally expensive.
+                A task that JavaScript is not well suited to. Here, the fractal
+                rendering logic is written in
+                <a href="https://www.rust-lang.org/" target="_blank">Rust</a>, a
+                high performance systems programming language. This source is
+                then compiled to
+                <a href="https://webassembly.org/" target="_blank"
+                  >WebAssembly</a
+                >
+                (also known as WASM), a binary format and runtime environment
+                for executing high performance code within a browser.
+              </p>
+              <p>
+                For more details on the implementation, see the source code on
+                <a href="https://github.com/dtcristo/mandelbrot" target="_blank"
+                  >GitHub</a
+                >.
+              </p>
+            </div>
           </div>
         </div>
       </section>

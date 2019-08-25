@@ -34,10 +34,7 @@ export default class Gallery extends BaseComponent {
           <div class="content">
             <h1>Gallery</h1>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              accumsan, metus ultrices eleifend gravida, nulla nunc varius
-              lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui.
-              Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
+              Browse some of the amazing images found within the Mandelbrot set.
             </p>
           </div>
 
