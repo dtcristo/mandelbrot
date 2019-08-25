@@ -31,7 +31,7 @@ export default class Mandelbrot extends BaseElement {
   centreY = 0;
   zoom = 0;
   maxIterations = 100;
-  navigatable = false;
+  navigable = false;
   @property({ attribute: false }) private imageData?: ImageData;
   @query("canvas") private $canvas!: HTMLCanvasElement;
   private instanceId = nextInstanceId++;
@@ -83,7 +83,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   async handleLeftClick(event: MouseEvent) {
-    if (this.navigatable) {
+    if (this.navigable) {
       const multiplier = window.devicePixelRatio || 1;
       const relX = event.pageX - this.$canvas.offsetLeft;
       const relY = event.pageY - this.$canvas.offsetTop;
@@ -106,7 +106,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   handleRightClick(event: MouseEvent) {
-    if (this.navigatable) {
+    if (this.navigable) {
       event.preventDefault();
       if (this.zoom > 0) {
         this.zoom -= 1;

@@ -22,7 +22,7 @@ export default class Explore extends BaseComponent {
         .centreY=${parseFloat(centreY)}
         .zoom=${parseInt(zoom)}
         .maxIterations=${parseInt(maxIterations)}
-        .navigatable=${true}
+        .navigable=${true}
       ></x-mandelbrot>
     `;
   }
