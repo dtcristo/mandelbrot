@@ -10,8 +10,6 @@ import { throttle } from "lodash-es";
 import BaseElement from "./base_component";
 import init, { pixelToCoords } from "../../../mandelbrot-core/pkg";
 
-const worker = new Worker("worker.js");
-
 const initPromise = new Promise(async resolve => {
   await init("mandelbrot_core_bg.wasm");
   resolve();
@@ -28,6 +26,7 @@ export interface MandelbrotLocation {
 
 @customElement("x-mandelbrot")
 export default class Mandelbrot extends BaseElement {
+  worker = new Worker("worker.js");
   centreX = -0.666;
   centreY = 0;
   zoom = 0;
@@ -51,13 +50,13 @@ export default class Mandelbrot extends BaseElement {
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener("resize", this.throttledHandleResize);
-    worker.addEventListener("message", this.handleWorkerMessage);
+    this.worker.addEventListener("message", this.handleWorkerMessage);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener("resize", this.throttledHandleResize);
-    worker.removeEventListener("message", this.handleWorkerMessage);
+    this.worker.removeEventListener("message", this.handleWorkerMessage);
   }
 
   firstUpdated(props: PropertyValues) {
@@ -72,7 +71,7 @@ export default class Mandelbrot extends BaseElement {
   }
 
   triggerWorker() {
-    worker.postMessage({
+    this.worker.postMessage({
       instanceId: this.instanceId,
       width: this.$canvas.width,
       height: this.$canvas.height,
