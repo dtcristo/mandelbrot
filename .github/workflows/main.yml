@@ -8,8 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       # - uses: actions/setup-node@v1
-      - run: script/setup
-      - run: script/build
-      - run: script/deploy
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - run: env
+      - run: pwd
+      # - run: script/setup
+      # - run: script/build
+      # - run: script/deploy
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
