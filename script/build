@@ -8,3 +8,4 @@ wasm-pack build mandelbrot-core --target web
 cd mandelbrot-web/
 rm -rf dist/
 node_modules/.bin/rollup --config
+cd ../

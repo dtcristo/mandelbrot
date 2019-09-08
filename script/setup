@@ -1,25 +1,22 @@
 #!/bin/sh
 set -e
 
-# Install development dependencies
-if [ "$GITHUB_ACTIONS" != "true" ]; then
-  cargo install watchexec
+if [ "$GITHUB_ACTIONS" = "true" ]; then
+  # Use wasm-pack binary release in CI
+  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+else
+  # Development only tools
+  cargo install wasm-pack
+  brew install hivemind watchexec
 fi
 
-# Install Rust dependencies
+# Install Rust WASM target
 rustup target add wasm32-unknown-unknown
-cargo install wasm-pack
 
 # Install web frontend dependencies
 cd mandelbrot-web/
 npm ci
 cd ../
 
-# Setup location for installing global npm packages
-# if [ "$CIRCLECI" = "true" ]; then
-#   npm config set prefix=/home/circleci/npm
-#   echo 'export PATH="/home/circleci/npm/bin:$PATH"' >>$BASH_ENV
-# fi
-
-# Install development and deployment tools
+# Install development/deployment tools
 npm install -g firebase-tools
