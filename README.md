@@ -1,9 +1,15 @@
-# mandelbrot
-
-[Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) in Rust targeting
-WebAssembly, online at [mandelbrot-rust.web.app](https://mandelbrot-rust.web.app/).
-
-[![mandelbrot](images/mandelbrot.png)](https://mandelbrot-rust.web.app/)
+<div align="center">
+  <h1>mandelbrot</h1>
+  <p>
+    <strong
+      ><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>
+      in Rust targeting WebAssembly.</strong
+    >
+  </p>
+  <a href="https://mandelbrot-rust.web.app/">
+    <img src="images/mandelbrot.png" />
+  </a>
+</div>
 
 ## Controls
 
