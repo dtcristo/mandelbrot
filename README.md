@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>mandelbrot</h1>
+  <h1>🔮 mandelbrot</h1>
   <p>
     <strong
       ><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>
