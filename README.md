@@ -1,10 +1,10 @@
 <div align="center">
   <h1>🔮 mandelbrot</h1>
   <p>
-    <strong
-      ><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>
-      in Rust targeting WebAssembly</strong
-    >
+    <strong>
+      <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>
+      in Rust targeting WebAssembly
+    </strong>
   </p>
   <a href="https://mandelbrot-rust.web.app/">
     <img src="images/mandelbrot.png" />
