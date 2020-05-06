@@ -3,7 +3,7 @@
   <p>
     <strong
       ><a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a>
-      in Rust targeting WebAssembly.</strong
+      in Rust targeting WebAssembly</strong
     >
   </p>
   <a href="https://mandelbrot-rust.web.app/">
