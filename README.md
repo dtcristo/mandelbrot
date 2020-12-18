@@ -6,7 +6,7 @@
       in Rust targeting WebAssembly
     </strong>
   </p>
-  <a href="https://mandelbrot-rust.web.app/">
+  <a href="https://mandelbrot.dtcristo.com/">
     <img src="images/mandelbrot.png" />
   </a>
 </div>
