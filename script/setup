@@ -17,6 +17,3 @@ rustup target add wasm32-unknown-unknown
 cd mandelbrot-web/
 npm ci
 cd ../
-
-# Install development/deployment tools
-npm install -g firebase-tools

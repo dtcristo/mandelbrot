@@ -2,4 +2,4 @@
 set -e
 
 # Deploy to Firebase Hosting at https://mandelbrot.dtcristo.com/
-firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+mandelbrot-web/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN" --non-interactive

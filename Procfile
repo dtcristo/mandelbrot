@@ -1,3 +1,3 @@
-wasm-pack: script/watch-wasm-pack
-rollup: script/watch-rollup
+wasm-pack: script/wasm-pack-watch
+rollup: script/rollup-watch
 serve: script/serve
