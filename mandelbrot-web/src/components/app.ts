@@ -5,7 +5,6 @@ import BaseComponent from "./base_component";
 import "./navbar";
 import "./pages/explore";
 import "./pages/gallery";
-import "./pages/guestbook";
 import "./pages/about";
 
 const ROUTES: Router.Route[] = [
@@ -16,7 +15,6 @@ const ROUTES: Router.Route[] = [
   },
   { path: "gallery", component: "x-gallery" },
   { path: "about", component: "x-about" },
-  { path: "guestbook", component: "x-guestbook" },
   { path: "(.*)", redirect: "explore" }
 ];
 

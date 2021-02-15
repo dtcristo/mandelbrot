@@ -105,18 +105,6 @@ export default class Navbar extends BaseElement {
               </span>
               <span>About</span>
             </a>
-            <a
-              href="guestbook"
-              class=${classMap({
-                ...itemClass,
-                "is-active": this.activeComponent === "x-guestbook"
-              })}
-            >
-              <span class="icon has-text-danger">
-                <i class="fas fa-book"></i>
-              </span>
-              <span>Guestbook</span>
-            </a>
           </div>
           <div class="navbar-end">
             <div class="navbar-item">
