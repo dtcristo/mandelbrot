@@ -9,6 +9,6 @@ jobs:
       - run: script/setup
       - run: script/build
       - run: script/deploy
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
