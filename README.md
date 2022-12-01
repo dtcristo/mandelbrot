@@ -30,13 +30,7 @@ Build Rust and web frontend.
 script/build
 ```
 
-Serve frontend at [localhost:5000](http://localhost:5000/).
-
-```sh
-script/serve
-```
-
-Alternatively, start development server with live-reload.
+Start development server with live-reload.
 
 ```sh
 script/start
