@@ -15,7 +15,7 @@ jobs:
         run: script/setup
       - name: Build
         run: script/build
-      - name: Upload dist
+      - name: Upload `dist`
         uses: actions/upload-artifact@v3
         with:
           name: dist
@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download dist
+      - name: Download `dist`
         uses: actions/download-artifact@v3
         with:
           name: dist
